@@ -186,7 +186,6 @@ DNS服务器向 .terminus.io 域的权威域名服务器发送查询报文"query
 
 * https:包含http crypto 主要是为了确保数据安全性
 
-node里有各种网络相关的模块, http为应用层模块，主要按照特定协议编解码数据；net为传输层模块，主要负责传输编码后的应用层数据；https是个综合模块（涵盖了http/tls/crypto等），主要用于确保数据安全性
 
 1. 创建tcp服务端
 
