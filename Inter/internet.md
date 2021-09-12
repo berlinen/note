@@ -287,10 +287,15 @@ server.bind(44444); // 0.0.0.0:44444 面向公网的ip
 
 ```js
 const dgram = require('dgram')
-const message = Buffer.alloc(5, 'lubai')
+const message = Buffer.alloc(6, 'berlin')
 const client = dgram.createSocket('udp4')
-
-client.send(message, 0, message.length, 44444, 'localhost',
+/**
+ * messing string Buffer
+ * 0 偏移量
+ * message.length 确定能发送几个字节
+ * 端口
+ */
+client.send(message, 0, 2, 44444, 'localhost',
     (err, bytes) => {
         console.log(`发送成功${bytes}字节`);
         // client.close()
@@ -311,330 +316,47 @@ client.on('message', (buffer) => {
 
 ## HTTP
 
+下次分享
 
-HTTP协议（HyperText Transfer Protocol，超文本传输协议）是用于从WWW服务器传输超文本到本地浏览器的传输协议。它可以使浏览器更加高效，使网络传输减少。它不仅保证计算机正确快速地传输超文本文档，还确定传输文档中的哪一部分，以及哪部分内容首先显示(如文本先于图形)等。
-HTTP是客户端浏览器或其他程序与Web服务器之间的应用层通信协议。在Internet上的Web服务器上存放的都是超文本信息，客户机需要通过HTTP协议传输所要访问的超文本信息。HTTP包含命令和传输信息，不仅可用于Web访问，也可以用于其他因特网/内联网应用系统之间的通信，从而实现各类应用资源超媒体访问的集成。
-我们在浏览器的地址栏里输入的网站地址叫做URL (Uniform Resource Locator，统一资源定位符)。就像每家每户都有一个门牌地址一样，每个网页也都有一个Internet地址。当你在浏览器的地址框中输入一个URL或是单击一个超级链接时，URL就确定了要浏览的地址。浏览器通过超文本传输协议(HTTP)，将Web服务器上站点的网页代码提取出来，并翻译成漂亮的网页。
+## 附加
 
+## js 模块化
 
-### 一次完整的HTTP通信是什么样子的?
 
-1. 建立 TCP 连接
-在HTTP工作开始之前，客户端首先要通过网络与服务器建立连接，该连接是通过 TCP 来完成的。HTTP 是比 TCP 更高层次的应用层协议，根据规则，只有低层协议建立之后，才能进行高层协议的连接，因此，首先要建立 TCP 连接，一般 TCP 连接的端口号是80；
 
-2. 客户端向服务器发送请求命令
-一旦建立了TCP连接，客户端就会向服务器发送请求命令；
-例如：GET/info HTTP/1.1
-
-3. 客户端发送请求头信息
-客户端发送其请求命令之后，还要以头信息的形式向服务器发送一些别的信息，之后客户端发送了一空白行来通知服务器，它已经结束了该头信息的发送；
-
-4. 服务器应答
-客户端向服务器发出请求后，服务器会客户端返回响应；
-例如： HTTP/1.1 200 OK
-响应的第一部分是协议的版本号和响应状态码
-
-5. 服务器返回响应头信息
-正如客户端会随同请求发送关于自身的信息一样，服务器也会随同响应向用户发送关于它自己的数据及被请求的文档；
-
-6. 服务器向客户端发送数据
-服务器向客户端发送头信息后，它会发送一个空白行来表示头信息的发送到此为结束，接着，它就以 Content-Type 响应头信息所描述的格式发送用户所请求的实际数据；
-
-7. 服务器关闭 TCP 连接
-一般情况下，一旦服务器向客户端返回了请求数据，它就要关闭 TCP 连接，然后如果客户端或者服务器在其头信息加入了这行代码 Connection:keep-alive ，TCP 连接在发送后将仍然保持打开状态，于是，客户端可以继续通过相同的连接发送请求。保持连接节省了为每个请求建立新连接所需的时间，还节约了网络带宽。
-
-### HTTP协议有哪些特点?
-
-1. 通过请求和响应的交换达成通信
-
-协议规定, 请求从客户端发出, 服务端响应请求并返回.
-
-2. 无状态
-
-HTTP 是一种无状态协议, 在单纯HTTP这个层面，协议对于发送过的请求或响应都不做持久化处理
-
-3. 使用Cookie做状态管理
-
-服务端返回的头信息上有可能会携带Set-Cookie, 那么当客户端接收到响应后, 就会在本地种上cookie. 在下一次给服务端发送请求的时候, 就会携带上这些cookie。
-
-4. 通过URL定位资源
-
-这里区分一下URI和URL的概念.
-
-URI: 统一资源标识符, 比如你身份证号是xxxxxxx, 在所有人中是独一无二的, 这个身份证号就能标识你的身份, 那么它就是URI
-URL: 统一资源定位符, 比如北京市/朝阳区/xxxx/xxxx/xxxxx, 通过这一串信息可以定位到你, 那么这个就是URL
-
-URL有点类似于通过定位实现的URI.
-
-就像有个父类叫做URI, 他要实现的是唯一确定一个id. 有的人喜欢继承URI, 通过location来实现; 有的人喜欢继承URI, 通过name来实现.
-
-5. 通过各种方法来标识自己的意图
-
-这里指的是各种HTTP方法, 比如GET POST PUT DELETE等.
-
-6. 持久连接
-
-HTTP 协议的初始版本中，每进行一个 HTTP 通信都要断开一次 TCP 连接，增加了很多没必要的建立连接的开销。
-为了解决上述 TCP 连接的问题，HTTP/1.1 支持持久连接。其特点是，只要任意一端没有明确提出断开连接，则保持 TCP 连接状态。旨在建立一次 TCP 连接后进行多次请求和响应的交互。在 HTTP/1.1 中，所有的连接默认都是持久连接。
-
-也就是说默认情况下建立 TCP 连接不会断开，只有在请求报头中声明 Connection: close 才会在请求完成后关闭连接。
-
-7. 管道机制
-
-1.1版本引入pipelining机制, 即在同一个TCP连接里面，客户端可以同时发送多个请求。
-
-举例来说，客户端需要请求两个资源。以前的做法是，在同一个TCP连接里面，先发送A请求，然后等待服务器做出回应，收到后再发出B请求。管道机制则是允许浏览器同时发出A请求和B请求，但是服务器还是按照顺序，先回应A请求，完成后再回应B请求。
-
-但是现代浏览器一般没开启这个配置, 这个机制可能会造成队头阻塞. 因为响应是有顺序的, 如果一个TCP连接中的第一个HTTP请求响应非常慢, 那么就会阻塞后续HTTP请求的响应.
-
-所以现实中默认情况下, 一个TCP连接同一时间只发一个HTTP请求.
-
-有的同学会问, 我怎么听说chrome最大支持6个同域名请求呢？
-
-那是因为chrome最大支持同时开启6个TCP连接。
-
-
-### 那么HTTP 1.0/1.1/2.0在并发请求上主要区别是什么?
-
-1. HTTP/1.0
-每次TCP连接只能发送一个请求，当服务器响应后就会关闭这次连接，下一个请求需要再次建立TCP连接.
-
-2. HTTP/1.1
-默认采用持续连接(TCP连接默认不关闭，可以被多个请求复用，不用声明Connection: keep-alive).
-增加了管道机制，在同一个TCP连接里，允许多个请求同时发送，增加了并发性，进一步改善了HTTP协议的效率，
-但是同一个TCP连接里，所有的数据通信是按次序进行的。回应慢，会有许多请求排队，造成"队头堵塞"。
-
-3. HTTP/2.0
-
-加了双工模式，即不仅客户端能够同时发送多个请求，服务端也能同时处理多个请求，解决了队头堵塞的问题。
-使用了多路复用的技术，做到同一个连接并发处理多个请求，而且并发请求的数量比HTTP1.1大了好几个数量级。
-增加服务器推送的功能，不经请求服务端主动向客户端发送数据。
-
-### 各种Headers
-
-#### Cache-Control
-
-通过指定首部字段 Cache-Control 的指令，就能操作缓存的工作机制。
-
-1. Cache-Control: public
-
-当指定使用 public 指令时，则明确表明其他用户也可利用缓存。
-
-2. Cache-Control: private
-
-当指定 private 指令后，响应只以特定的用户作为对象，这与 public 指令的行为相反。缓存服务器会对该特定用户提供资源缓存的服务，对于其他用户发送过来的请求，代理服务器则不会返回缓存。
-
-3. Cache-Control: no-cache
-
-可以在客户端存储资源，每次都必须去服务端做过期校验，来决定从服务端获取新的资源（200）还是使用客户端缓存（304）。也就是所谓的协商缓存。
-
-4. Cache-Control: no-store
-
-永远都不要在客户端存储资源，永远都去原始服务器去获取资源。
-
-5. Cache-Control: max-age=604800（单位：秒）
-
-当客户端发送的请求中包含 max-age 指令时，如果判定缓存资源的缓存时间数值比指定的时间更小，那么客户端就接收缓存的资源。另外，当指定 max-age 的值为0，那么缓存服务器通常需要将请求转发给源服务器。
-
-HTTP/1.1 版本的缓存服务器遇到同时存在 Expires 首部字段的情况时，会优先处理 max-age 指令，并忽略掉 Expires 首部字段
-
-6. Cache-Control: s-maxage=604800（单位：秒）
-
-s-maxage 指令的功能和 max-age 指令的相同，它们的不同点是 s-maxage 指令只适用于供多位用户使用的公共缓存服务器（一般指代理）。
-当使用 s-maxage 指令后，则直接忽略对 Expires 首部字段及 max-age 指令的处理
-
-#### Connection
-
-1. Connection: close
-
-HTTP/1.1 版本的默认连接都是持久连接。当服务器端想明确断开连接时，则指定 Connection 首部字段的值为 close。
-
-2. Connection: Keep-Alive
-
-HTTP/1.1 之前的 HTTP 版本的默认连接都是非持久连接。为此，如果想在旧版本的 HTTP 协议上维持持续连接，则需要指定 Connection 首部字段的值为 Keep-Alive。
-
-#### Date
-
-表明创建 HTTP 报文的日期和时间。
-Date: Mon, 10 Jul 2021 15:50:06 GMT
-HTTP/1.1 协议使用在 RFC1123 中规定的日期时间的格式。
-
-#### Pragma
-
-Pragma 首部字段是 HTTP/1.1 版本之前的历史遗留字段，仅作为与 HTTP/1.0 的向后兼容而定义。
-
-1. Pragma: no-cache
-
-该首部字段属于通用首部字段，但只用在客户端发送的请求中，要求所有的中间服务器不返回缓存的资源。
-
-所有的中间服务器如果都能以 HTTP/1.1 为基准，那直接采用 Cache-Control: no-cache 指定缓存的处理方式最为理想。但是要整体掌握所有中间服务器使用的 HTTP 协议版本却是不现实的，所以，发送的请求会同时包含下面两个首部字段：
-
-```
-Cache-Control: no-cache
-Pragma: no-cache
-```
-
-#### Accept
-
-1. Accept: text/html, application/xhtml+xml, application/xml;
-
-Accept 首部字段可通知服务器，用户代理能够处理的媒体类型及媒体类型的相对优先级。可使用 type/subtype 这种形式，一次指定多种媒体类型。
-
-2. Accept-Encoding: gzip, deflate
-
-Accept-Encoding 首部字段用来告知服务器用户代理支持的内容编码及内容编码的优先顺序，并可一次性指定多种内容编码
-也可使用星号（*）作为通配符，指定任意的编码格式。
-
-gzip	表明实体采用 GNU zip 编码
-compress	表明实体采用 Unix 的文件压缩程序
-deflate	表明实体采用 zlib 的格式压缩的
-identity	表明没有对实体进行编码，当没有 Content-Encoding 首部字段时，默认采用此编码方式
-
-
-#### Host
-
-1. Host: www.baidu.com
-
-* 告知服务器，请求的资源所处的互联网主机和端口号。
-* Host 首部字段是 HTTP/1.1 规范内唯一一个必须被包含在请求内的首部字段。
-* 若服务器未设定主机名，那直接发送一个空值即可 Host: 。
-
-#### If-Modified-Since
-
-形如 If-xxx 这种样式的请求首部字段，都可称为条件请求。服务器接收到附带条件的请求后，只有判断指定条件为真时，才会执行请求。
-
-1. If-Modified-Since: Mon, 10 Jul 2021 15:50:06 GMT
-
-用于确认代理或客户端拥有的本地资源的有效性。
-在指定 If-Modified-Since 字段值的日期时间之后，如果请求的资源都没有过更新，则返回状态码 304 Not Modified 的响应
-
-### ETag
-
-1. ETag: "aaaa-1234"
-
-首部字段 ETag 能告知客户端实体标识。它是一种可将资源以字符串形式做唯一性标识的方式。服务器会为每份资源分配对应的 ETag 值。
-另外，当资源更新时，ETag 值也需要更新。生成 ETag 值时，并没有统一的算法规则，而仅仅是由服务器来分配。
-
-#### If-None-Match
-
-1. If-None-Match: "lubai"
-
-用于指定 If-None-Match 字段值的实体标记（ETag）值与请求资源的 ETag 不一致时，它就告知服务器处理该请求。
-
-#### User-Agent
-
-1. User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
-
-首部字段 User-Agent 会将创建请求的浏览器和用户代理名称等信息传达给服务器。
-由网络爬虫发起请求时，有可能会在字段内添加爬虫作者的电子邮件地址。此外，如果请求经过代理，那么中间也很可能被添加上代理服务器的名称。
-
-#### Allow
-
-1. Allow: GET, HEAD
-
-首部字段 Allow 用于通知客户端能够支持 Request-URI 指定资源的所有 HTTP 方法。
-当服务器接收到不支持的 HTTP 方法时，会以状态码 405 Method Not Allowed 作为响应返回。与此同时，还会把所有能支持的 HTTP 方法写入首部字段 Allow 后返回。
-
-#### Content-Encoding
-
-1. Content-Encoding: gzip
-
-首部字段 Content-Encoding 会告知客户端服务器对实体的主体部分选用的内容编码方式。内容编码是指在不丢失实体信息的前提下所进行的压缩。
-
-#### Content-Type
-
-1. Content-Type: text/html; charset=UTF-8
-
-首部字段 Content-Type 说明了实体主体内对象的媒体类型。和首部字段 Accept 一样，字段值用 type/subtype 形式赋值。
-
-#### Expires
-
-1. Expires: Mon, 10 Jul 2021 15:50:06 GMT
-
-首部字段 Expires 会将资源失效的日期告知客户端。
-缓存服务器在接收到含有首部字段 Expires 的响应后，会以缓存来应答请求，在 Expires 字段值指定的时间之前，响应的副本会一直被保存。当超过指定的时间后，缓存服务器在请求发送过来时，会转向源服务器请求资源。
-
-#### Set-Cookie
-
-1. Set-Cookie: userId=11111; expires=Mon, 10 Jul 20121 15:50:06 GMT; path=/;
-
-* NAME=VALUE: cookie名称和值
-* expires=DATE: Cookie 的有效期（若不明确指定则默认为浏览器关闭前为止）
-* path=PATH: 用于限制指定 Cookie 的发送范围的文件目录。
-* domain=域名: cookie有效的域名 （若不指定则默认为创建 Cookie的服务器的域名）
-* Secure: 仅在 HTTPS 安全通信时才会发送 Cookie
-* HttpOnly: 使 Cookie 不能被 JavaScript 脚本访问
-
-
-### 如何使用NodeJs创建HTTP服务？
-
-1. http-server.js
+#### 彩蛋
 
 ```js
-const http = require('http')
-http.createServer(function (req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/plain'
-    })
-    res.end('Hello World')
-}).listen(80, '127.0.0.1')
-
-console.log('Server running at http://127.0.0.1:80/')
-```
-
-2. 浏览器访问
-
-http://127.0.0.1:80/
-
-3. 用curl访问
-
-curl -v http://127.0.0.1:80
-
-看一下请求报文
-
-```
-// 三次握手
-* Rebuilt URL to: http://127.0.0.1:80/
-*   Trying 127.0.0.1...
-* TCP_NODELAY set
-* Connected to 127.0.0.1 (127.0.0.1) port 80 (#0)
-
-// 客户端向服务端发送请求报文
-> GET / HTTP/1.1
-> Host: 127.0.0.1:80
-> User-Agent: curl/7.54.0
-> Accept: */*
->
-
-// 服务端响应客户端内容
-< HTTP/1.1 200 OK
-< Content-Type: text/plain
-< Date: Wed, 04 Aug 2021 15:55:55 GMT
-< Connection: keep-alive
-< Keep-Alive: timeout=5
-< Transfer-Encoding: chunked
-<
-* Connection #0 to host 127.0.0.1 left intact
-Hello World%
-```
-
-4. htttp-client.js
-
-```js
-const http = require('http')
-
-const options = {
-    hostname: '127.0.0.1',
-    port: 80,
-    path: '/',
-    method: 'GET'
-}
-const req = http.request(options, (res) => {
-    console.log(`Status=${res.statusCode}, Headers=${JSON.stringify(res.headers)}`);
-    res.setEncoding('utf8')
-    res.on('data', (data) => {
-        console.log(data)
-    })
+Promise.resolve().then(() => {
+  console.log(0)
+  return Promise.resolve(4)
+}).then(res => {
+  console.log(res)
 })
-req.end()
+
+Promise.resolve().then(() => {
+  console.log(1)
+}).then(() => {
+  console.log(2)
+}).then(() => {
+  console.log(3)
+}).then(() => {
+  console.log(5)
+}).then(() => {
+  console.log(6)
+}).then(() => {
+  console.log(7)
+}).then(() => {
+  console.log(8)
+})
+
 ```
+
+1. 发现各大论坛上js模拟的Promise和原生V8引擎的Promise都不一致,是不是有不可替代的区别
+
+2. 看了网上有人说原生Promisie return promise.resolve(4), 会产生两个微任务（自己处理的话，一般都是判断是否是Promise， 如果是会包一层then，也就是多了一层微任务）
+
+3. 为什么会产生两个微任务
+
+- promise A+ 在什么时会return Promise.resolve？ 等到当前执行栈为空的的时候， 才会去resolve掉这个新的Promise
+
