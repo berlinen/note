@@ -222,43 +222,35 @@ console.log(`Server listening on ${HOST}:${PORT}`);
 2. 创建tcp客户端
 
 ```js
-const net = require('net');
+const net = require('net'); // 传输层
 
 const HOST = '127.0.0.1';
 const PORT = 7777;
 
-const client = new net.Socket();
-const ServerName = `${HOST}:${PORT}`;
-let count = 0;
+// 创建一个TCP服务器实例，调用listen函数开始监听指定端口
+// net.createServer()有一个参数, 是监听连接建立的回调
+net.createServer((socket) => {
+    // 拿远程ip和端口号
+    const remoteName = `${socket.remoteAddress}:${socket.remotePort}`;
+    // 建立成功了一个连接, 这个回调函数里返回一个socket对象.
+    console.log(`${remoteName} 连接到本服务器`);
+    // 可以当做事件机制看
+    // 接收消息
+    socket.on('data', (data) => {
+        console.log(`${remoteName} - ${data}`)
+        // 给客户端发消息
+        socket.write(`你刚才说啥？是${data}吗？`);
+    });
 
-client.connect(PORT, HOST, () => {
-    console.log(`成功连接到 ${ServerName}`);
-    // 向服务端发送数据
-    const timer = setInterval(() => {
-        if (count > 10) {
-            client.write('我没事了, 告辞');
-            clearInterval(timer);
-            return;
-        }
-        client.write('马冬梅' + count++);
-    }, 1000)
-});
+    // 关闭
+    socket.on('close', (data) => {
+        console.log(`${remoteName} 连接关闭`)
+    });
 
-// 接收消息
-client.on('data', (data) => {
-    console.log(`${ServerName} - ${data}`);
-    // 关闭连接
-    // client.destroy();
-});
+}).listen(PORT, HOST);
 
-// 关闭事件
-client.on('close', () => {
-    console.log('Connection closed');
-});
+console.log(`Server listening on ${HOST}:${PORT}`);
 
-client.on('error', (error) => {
-    console.log(error);
-})
 ```
 
 3. 运行一下
