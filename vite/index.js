@@ -15,6 +15,7 @@ function createServer() {
   // koa是基于koa中间件来运行的
   // 可以用每一个文件来表示
   const resolvedPlugins = [ // 插件的集合
+    // 2） 解析import语法，进行一个重写的操作，重写路径
     // 1） 实现一个静态服务
     serveStaticPlugin
   ]

@@ -1,15 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3.0 + Vite" />
+  <div>{{ count }}</div>
+  <button @click="handleClick">+</button>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { reactive, toRefs } from 'vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  setup() {
+    let state = reactive({
+      count: 0
+    })
+
+    function handleClick() {
+      state.count++
+    }
+
+    return {
+      ...toRefs(state),
+      handleClick
+    }
   }
 }
 </script>
