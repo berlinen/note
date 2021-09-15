@@ -4,7 +4,7 @@ const { moduleRewritePlugin } = require('./plugins/serverPluginModuleRewrite.js'
 const { moduleResolvePlugin } = require('./plugins/serverPluginModuleResolve.js')
 
 /**
- *
+ * 
  * @returns
  * 1 默认采用的是es6原生的模块 import 语法 在 es6中默认会发送一个请求
  * 2 默认会给vue模块增加一个前缀 /@module

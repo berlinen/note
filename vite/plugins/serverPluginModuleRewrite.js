@@ -13,7 +13,7 @@ function rewriteImports(source) {
       let id = source.substring(s, e) // vue, ./App
       // 当前开头是 / 或者 . 不需要重写
       if(/^[^\/\.]/.test(id)) {
-        id = `@/modules/${id}` // 标识这个模块是第三方模块
+        id = `/@modules/${id}` // 标识这个模块是第三方模块
         magicString.overwrite(s, e, id)
       }
     }

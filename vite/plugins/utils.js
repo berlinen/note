@@ -1,4 +1,4 @@
-const { Readable } = require('stream')
+const { Readable} = require('stream')
 
 const readBody = (stream) => {
   // koa中要求所有的异步方法必须包装成promise
@@ -14,7 +14,7 @@ const readBody = (stream) => {
       })
     })
   } else {
-    return new Promise.resolve(stream.toString())
+    return Promise.resolve(stream.toString())
   }
 }
 
