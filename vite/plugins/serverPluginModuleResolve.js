@@ -34,7 +34,6 @@ function resolveVue(root) {
 
 const moduleResolvePlugin = ({ app, root }) => {
   const vueResolved = resolveVue(root) // 根据当前运行的vite的目录解析出一个文件表来，包含着vue中所有的模块
-
   app.use(async(ctx, next) => {
 
     if(!moduleReg.test(ctx.path)) { // 处理当前的请求路径 是否以@modules开头的
@@ -42,7 +41,6 @@ const moduleResolvePlugin = ({ app, root }) => {
     }
     // @modules 替换掉
     const id = ctx.path.replace(moduleReg, '') // vue
-    console.log('>>>>id>>', id)
 
     ctx.type = 'js' // 设置响应的类型 响应的结果是js
 

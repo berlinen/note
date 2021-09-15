@@ -25,7 +25,6 @@ function rewriteImports(source) {
 const moduleRewritePlugin  = ({ app, root }) => {
   app.use(async(ctx, next) => {
     await next() // ctx.body = await fs.createReadStream
-
     // 在这里完善了自己的逻辑，洋葱模型
 
     // 获取流中的数据
