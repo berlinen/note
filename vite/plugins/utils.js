@@ -18,4 +18,38 @@ const readBody = (stream) => {
   }
 }
 
+function resolveVue(root) {
+  //  vue3 you6几部分组成 runtime-dom runtine-core compiler reactivity shared compiler-sfc  在后端中解析.vue文件
+
+  // 编译是在后端实现的，所以我需要拿到的文件是commonJs规范的
+  const compilerPkgPath = path.join(root, 'node_modules', '@vue/compiler-sfc/package.json')
+
+  const compilerPkg = require(compilerPkgPath) // 获取的是json中的文件
+
+  // node_modules/@vue/compiler-src/dist/compiler-sfc.cjs.js
+  const compilerPath = path.join(path.dirname(compilerPkgPath), compilerPkg.main)
+
+  const resolvePath = name => path.resolve(root, 'node_modules', `@vue/${name}/dist/${name}.esm-bundler.js`)
+
+  const runtimeDomPath = resolvePath('runtime-dom')
+  const runtimeCorePath = resolvePath('runtime-core')
+  const reactivityPath = resolvePath('reactivity')
+  const sharedPath = resolvePath('shared')
+
+  // esModule 模块
+  return { // 用于稍后后端进行编译的文件路径
+    compiler: compilerPath,
+    '@vue/runtime-dom': runtimeDomPath,
+    '@vue/runtime-core': runtimeCorePath,
+    '@vue/reactivity': reactivityPath,
+    '@vue/shared': sharedPath,
+    vue: runtimeDomPath
+  }
+}
+
 module.exports = readBody
+
+module.exports = {
+  readBody,
+  resolveVue
+}

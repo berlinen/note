@@ -1,7 +1,7 @@
 const path = require('path')
 const {parse} = require('es-module-lexer') //  解析import语法的
 const MagicString =  require('magic-string') // 因为字符串具有不变性
-const readBody = require('./utils')
+const { readBody } = require('./utils')
 
 function rewriteImports(source) {
   let imports = parse(source)[0]

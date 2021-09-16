@@ -3,7 +3,7 @@ const { serveStaticPlugin } = require('./plugins/serverPluginsServeStatic')
 const { moduleRewritePlugin } = require('./plugins/serverPluginModuleRewrite.js')
 const { moduleResolvePlugin } = require('./plugins/serverPluginModuleResolve.js')
 const { htmlRewritePlugin } = require('./plugins/serverPluginHtml.js')
-
+const { vuePlugin } = require('./plugins/serverVuePlugin')
 /**
  *
  * @returns
@@ -27,6 +27,7 @@ function createServer() {
   // koa是基于koa中间件来运行的
   // 可以用每一个文件来表示
   const resolvedPlugins = [ // 插件的集合
+    vuePlugin,
     htmlRewritePlugin,
     // 3） 解析import语法，进行一个重写的操作，重写路径
     moduleRewritePlugin,
