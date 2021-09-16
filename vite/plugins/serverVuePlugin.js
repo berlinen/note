@@ -35,7 +35,7 @@ const vuePlugin = ({app, root}) => { // ast语法树
       ctx.type = 'js'
       let content = descriptor.template.content
       const { code } = compileTemplate({ source: content })
-      ctx.body = code
+
     }
   })
 }
