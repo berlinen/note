@@ -2,9 +2,10 @@ const Koa = require('koa')
 const { serveStaticPlugin } = require('./plugins/serverPluginsServeStatic')
 const { moduleRewritePlugin } = require('./plugins/serverPluginModuleRewrite.js')
 const { moduleResolvePlugin } = require('./plugins/serverPluginModuleResolve.js')
+const { htmlRewritePlugin } = require('./plugins/serverPluginHtml.js')
 
 /**
- * 
+ *
  * @returns
  * 1 默认采用的是es6原生的模块 import 语法 在 es6中默认会发送一个请求
  * 2 默认会给vue模块增加一个前缀 /@module
@@ -26,6 +27,7 @@ function createServer() {
   // koa是基于koa中间件来运行的
   // 可以用每一个文件来表示
   const resolvedPlugins = [ // 插件的集合
+    htmlRewritePlugin,
     // 3） 解析import语法，进行一个重写的操作，重写路径
     moduleRewritePlugin,
     // 2) 解析 以/@modules文件开头的内容， 找到对应的结果
