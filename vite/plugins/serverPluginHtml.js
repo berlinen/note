@@ -1,4 +1,4 @@
-const readBody = require("./utils")
+const {readBody} = require("./utils")
 
 
 const htmlRewritePlugin = ({ app, root }) => {
