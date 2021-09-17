@@ -7,7 +7,7 @@ const client = dgram.createSocket('udp4')
  * message.length 确定能发送几个字节
  * 端口
  */
-client.send(message, 0, 2, 44444, 'localhost',
+client.send(message, 0, message.length, 44444, 'localhost',
     (err, bytes) => {
         console.log(`发送成功${bytes}字节`);
         // client.close()
