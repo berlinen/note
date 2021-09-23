@@ -15,12 +15,20 @@ function insert_sort(arr) {
       i--
     }
     arr[i + 1]  = key
-
-    console.log(arr)
   }
+  return arr
+ }
+
+
+ function mid_sort(arr)  {
+   
  }
 
  // 测试方法
 
+ module.exports = insert_sort
 
- insert_sort([1, 3, 5, 2, 4, 6])
+ // insert_sort([1, 3, 5, 2, 4, 6])
+
+
+

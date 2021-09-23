@@ -36,7 +36,7 @@
 
 //  console.log(finish_yates_shuffle(gen(100)))
 
-const arr = gen(100)
+const arr = gen(10)
 for(let i = 0 ; i < arr.length; i++)  {
   console.log(arr[i])
 }
