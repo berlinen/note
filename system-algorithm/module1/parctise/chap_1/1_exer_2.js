@@ -19,16 +19,72 @@ function insert_sort(arr) {
   return arr
  }
 
+/**
+ * 归并排序 拆倒只有两个元素为止
+ * 拆分 -> 比较 -> 合并·
+ * @param {*} arr
+ */
 
- function mid_sort(arr)  {
-   
+const SENTINEL = Number.MAX_SAFE_INTEGER
+ function divide_conquer_sort(arr)  {
+
+ }
+
+ function devide(p, r) {
+    return Math.floor((p + r) / 2)
+ }
+
+ /**
+  *
+  * A --- [3, 4]    [1, 2]
+  *
+  * A1 ---[3, 4, 9999999999]    [1, 2,  9999999999]
+  *
+  * i               j
+  * 1  2
+  *    j = 2
+  *
+  * @param {*} A 原数组
+  * @param {*} p  起始值
+  * @param {*} q  分割值
+  * @param {*} r 结束值
+  */
+ function conquer(A, p, q, r) {
+    const A1  = A.slice(p, q)
+    const A2 = A.slice(q, r)
+
+    A1.push(SENTINEL) // 哨兵
+    A2.push(SENTINEL)
+    // k 循环不变式中间值
+    for(let k = p, i = 0, j = 0; k < r;  k++) {
+      A[k] =  A1[i] < A2[j] ? A1[i++] : A2[j++]
+    }
+
+    console.log('A>>>>', A)
+ }
+
+ function merge_sort(A, p = 0, r) {
+   r = r || A.length
+   if(r - p === 1) return
+   if(r - p === 2) {
+     if(A[p] > A[r-1]) {
+       [A[p], A[r-1]] = [A[r-1], A[p]]
+     }
+     return
+   }
+   const q = devide(p, r)
+   console.log('divide:', q)
+
+   merge_sort(A, p, q)
+   merge_sort(A, q, r)
+   conquer(A, p, q, r)
  }
 
  // 测试方法
 
  module.exports = insert_sort
 
- // insert_sort([1, 3, 5, 2, 4, 6])
+ merge_sort([1, 3, 5, 2, 4, 6])
 
 
 
