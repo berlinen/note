@@ -9,7 +9,7 @@
      // 交换
      [arr[i], arr[j]] = [arr[j], arr[i]]
    }
-
+   // 2n + 2 + （c1 + c2）*n = (c1+c2+2) * n + c3
    return arr
  }
 
@@ -21,4 +21,15 @@
    return arr
  }
 
- console.log(finish_yates_shuffle(gen(100)))
+ // test
+ let count = 0
+ for(let j = 0; j < 10000; j++) {
+   const q = finish_yates_shuffle([1,2,3,4])
+   if(q[1] === 2) {
+     count++
+   }
+ }
+
+ console.log(count/10000)
+
+//  console.log(finish_yates_shuffle(gen(100)))
