@@ -18,6 +18,8 @@
    for(let i = 0 ; i < 10000 * w; i++) {
      arr.push(i)
    }
+   // 打乱
+   finish_yates_shuffle(arr)
    return arr
  }
 
@@ -30,6 +32,11 @@
    }
  }
 
- console.log(count/10000)
+ // console.log(count/10000)
 
 //  console.log(finish_yates_shuffle(gen(100)))
+
+const arr = gen(100)
+for(let i = 0 ; i < arr.length; i++)  {
+  console.log(arr[i])
+}
