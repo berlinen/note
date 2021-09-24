@@ -29,7 +29,12 @@ const SENTINEL = Number.MAX_SAFE_INTEGER
  function divide_conquer_sort(arr)  {
 
  }
-
+ /**
+  * 时间复杂度 O(N)
+  * @param {*} p
+  * @param {*} r
+  * @returns
+  */
  function devide(p, r) {
     return Math.floor((p + r) / 2)
  }
@@ -48,6 +53,7 @@ const SENTINEL = Number.MAX_SAFE_INTEGER
   * @param {*} p  起始值
   * @param {*} q  分割值
   * @param {*} r 结束值
+  * 时间复杂度 O(NlgN)
   */
  function conquer(A, p, q, r) {
     const A1  = A.slice(p, q)
@@ -59,8 +65,7 @@ const SENTINEL = Number.MAX_SAFE_INTEGER
     for(let k = p, i = 0, j = 0; k < r;  k++) {
       A[k] =  A1[i] < A2[j] ? A1[i++] : A2[j++]
     }
-
-    console.log('A>>>>', A)
+    // console.log('A>>>>', A)
  }
 
  function merge_sort(A, p = 0, r) {
@@ -73,16 +78,20 @@ const SENTINEL = Number.MAX_SAFE_INTEGER
      return
    }
    const q = devide(p, r)
-   console.log('divide:', q)
+   // console.log('divide:', q)
 
-   merge_sort(A, p, q)
+     (A, p, q)
    merge_sort(A, q, r)
    conquer(A, p, q, r)
+   return A
  }
 
  // 测试方法
 
- module.exports = insert_sort
+ module.exports = {
+  insert_sort,
+  merge_sort
+ }
 
  merge_sort([1, 3, 5, 2, 4, 6])
 
