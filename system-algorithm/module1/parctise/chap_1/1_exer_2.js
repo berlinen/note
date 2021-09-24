@@ -56,9 +56,9 @@ const SENTINEL = Number.MAX_SAFE_INTEGER
   * 时间复杂度 O(NlgN)
   */
  function conquer(A, p, q, r) {
+    // N *  lgN  空jian
     const A1  = A.slice(p, q)
     const A2 = A.slice(q, r)
-
     A1.push(SENTINEL) // 哨兵
     A2.push(SENTINEL)
     // k 循环不变式中间值
@@ -80,7 +80,7 @@ const SENTINEL = Number.MAX_SAFE_INTEGER
    const q = devide(p, r)
    // console.log('divide:', q)
 
-     (A, p, q)
+   merge_sort(A, p, q)
    merge_sort(A, q, r)
    conquer(A, p, q, r)
    return A
