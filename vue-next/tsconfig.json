@@ -4,6 +4,13 @@
     "module": "ESNEXT",
     "forceConsistentCasingInFileNames": true,
     "strict": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@vue/*": [
+        "packages/*/src"
+      ]
+    }
   }
 }
