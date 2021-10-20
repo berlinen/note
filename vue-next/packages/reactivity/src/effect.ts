@@ -19,6 +19,7 @@ const effect = (fn, options:any = {}) => {
 
 const createReactiveEffect = (fn, options) => {
   const effect = function reactiveEffect() {
+    fn() //函数执行时候会取之 会执行get函数
 
   }
 
@@ -34,4 +35,3 @@ export {
   effect
 }
 
-effect(() => {})
