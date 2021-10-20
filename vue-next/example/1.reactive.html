@@ -17,12 +17,14 @@
         shallowReadonly
       } = VueReactivity
 
-      let state = reactive({
+      let state = readonly({
         name: 'berlin',
         age: {
           number: 22
         }
       })
+
+      state.name  = 11
 
 
 
