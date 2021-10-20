@@ -23,7 +23,11 @@
       })
 
      effect(() => {
-      app.innerHTML = state.name + ',' + state.age
+      app.innerHTML = state.name + ',' + state.age + state.other
+     })
+
+     effect(() => {
+      app.innerHTML = state.name +  + state.other
      })
 
      setTimeout(() => {

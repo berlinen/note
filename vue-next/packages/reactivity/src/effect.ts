@@ -59,6 +59,8 @@ const track = (target, type, key) => { // 可以拿到当前的effect
     dep.add(activeEffect)
   }
 
+  console.log(targetMap)
+
 }
 
 // {name: 'berlon', age: 12} => name => [effect, effect]
