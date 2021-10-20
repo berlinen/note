@@ -2,6 +2,9 @@
 
 import { extend, isObject } from '@vue/shared'
 import { reactive, readonly } from './reactive'
+import { track } from './effect'
+import { TrackOpTypes } from './operators'
+
 // 是不是仅读的 设置 set时候会报异常
 // 是不是深度的
 
@@ -16,6 +19,7 @@ const createGetter = (isReadonly = false, isShallow = false) => {
 
     if(!isReadonly) {
       // 收集依赖没数据变化后可以更新对应的视图
+      track(target, TrackOpTypes.GET, key)
     }
     // 如果是浅的 直接返回第一层
     if(isShallow)  {

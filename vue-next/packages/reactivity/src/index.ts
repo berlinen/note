@@ -7,6 +7,7 @@ export {
 } from './reactive'
 
 export {
-  effect
+  effect,
+  track
 } from './effect'
 
