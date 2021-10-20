@@ -1,7 +1,5 @@
-const shared = {
-
-}
+const isObject = val => typeof val === 'object' && val !== null
 
 export {
-  shared
+  isObject
 }
