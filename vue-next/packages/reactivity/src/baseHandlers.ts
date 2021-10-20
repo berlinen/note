@@ -49,7 +49,7 @@ const shallowSet = createSetter(true)
 
 let readonlyObj = {
   set: (target, key, value) => {
-    console.log(`can not set ${key} equal ${value} on target ${target}`)
+    console.warn(`can not set ${key} equal ${value} on target`)
   }
 }
 
