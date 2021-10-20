@@ -1,12 +1,10 @@
 import { isObject } from "@vue/shared"
-
-const mutableHandlers = {
-
-}
-
-const shallowReactiveHandlers = {
-
-}
+import {
+  mutableHandlers,
+  shallowReactiveHandlers,
+  readonlyHandlers,
+  shallowReadonlyHandlers
+} from './baseHandlers'
 
 export function reactive(target) {
   return creatReactiveObject(target, false, mutableHandlers)
@@ -17,11 +15,11 @@ export function shallowReactive(target) {
 }
 
 export function readonly(target) {
-  return creatReactiveObject(target, true, mutableHandlers)
+  return creatReactiveObject(target, true, readonlyHandlers)
 }
 
 export function shallowReadonly(target) {
-  return creatReactiveObject(target, true, shallowReactiveHandlers)
+  return creatReactiveObject(target, true, shallowReadonlyHandlers)
 }
 
 // 是不是只读，是不是深度 柯里化
@@ -54,4 +52,4 @@ export function creatReactiveObject(target, isReadonly, baseHandlers) {
   proxyMap.set(target, proxy)// 将要代理的对戏喝对应代理结果缓存起来
 
   return proxy
-} 
+}
