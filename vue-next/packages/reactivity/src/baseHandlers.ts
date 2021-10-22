@@ -39,6 +39,8 @@ const createSetter = (isShallow = false) => {
   return function set(target, key, value, receiver) {
     const res = Reflect.set(target, key, value, receiver)
 
+    // 当数据更新时 通知对应属性的effect重新执行
+
     return res
   }
 }

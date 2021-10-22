@@ -18,12 +18,18 @@
 
       let state = reactive({
         name: 'berlin',
-        age: 33,
+        age: '33',
         other: 'xxx'
       })
 
+      let state1 = reactive({
+        name: 'berlin2',
+        age: '22',
+        other: 'xxx2'
+      })
+
      effect(() => {
-      app.innerHTML = state.name + ',' + state.age + state.other
+      app.innerHTML = state.name + state.age + state.other + state1.name
      })
 
      effect(() => {
