@@ -63,10 +63,15 @@ const track = (target, type, key) => { // 可以拿到当前的effect
 
 }
 
+const trigger = (target, type, key?, newVal?, oldValue?) => {
+
+}
+
 // {name: 'berlon', age: 12} => name => [effect, effect]
 
 export {
   effect,
-  track
+  track,
+  trigger
 }
 

@@ -1,9 +1,9 @@
 // 实现new Proxy(target, handlers)
 
-import { extend, isObject } from '@vue/shared'
+import { extend, hasChange, hasOwn, isArray, isInTegerKey, isObject } from '@vue/shared'
 import { reactive, readonly } from './reactive'
-import { track } from './effect'
-import { TrackOpTypes } from './operators'
+import { track, trigger } from './effect'
+import { TrackOpTypes, TriggerOpTypes } from './operators'
 
 // 是不是仅读的 设置 set时候会报异常
 // 是不是深度的
@@ -37,9 +37,24 @@ const createGetter = (isReadonly = false, isShallow = false) => {
 // 拦截设置值
 const createSetter = (isShallow = false) => {
   return function set(target, key, value, receiver) {
+
+    const oldValue = target[key] // 获取老的值
+
+    // 判断target是否有这个key值
+    const hadKey = isArray(target) && isInTegerKey(key) ? Number(key) < target.length : hasOwn(target, key)
+
     const res = Reflect.set(target, key, value, receiver)
+    // 区分新增 还是修改的 v2无法监控更改碎银 无法监控数组的长度  hack方法 需要特殊处理
 
     // 当数据更新时 通知对应属性的effect重新执行
+
+    if(!hadKey) {
+      // 新增
+      trigger(target, TriggerOpTypes.ADD, key, value)
+    } else if(hasChange) {
+      // 修改
+      trigger(target, TriggerOpTypes.SET, key, value, oldValue)
+    }
 
     return res
   }
