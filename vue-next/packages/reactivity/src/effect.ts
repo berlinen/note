@@ -1,4 +1,5 @@
-import { isArray } from "@vue/shared"
+import { isArray, isInTegerKey } from "@vue/shared"
+import { TriggerOpTypes } from "./operators"
 
 // 副作用函数
 let uid = 0
@@ -70,24 +71,44 @@ const trigger = (target, type, key?, newVal?, oldValue?) => {
   const depsMap = targetMap.get(target)
   if(!depsMap) return
 
-  const effects = new Set()
+  const effects = new Set() // 这里对Effect去重了
   const add = effectsToAdd => {
     if(effectsToAdd) {
-      effectsToAdd.forEach(effect => effects.add(effect))
+      effectsToAdd.forEach((effect): any => effects.add(effect))
     }
   }
   // 将所有的要执行的effect全部存到一个新的集合中，最终一起执行
 
+  // 结论  两个特殊情况
   // 1. 看修改的是不是数组的长度，修改长度影响范围比较广
+  // 2. 修改数组的无效索引也就是当前索引大雨该数组的长度
   if(isArray(target) && key === 'length') {
     // 如果对应的长度有依赖收集，需要更新
     depsMap.forEach((dep, key) => {
-      console.log('depsMap', depsMap, 'dep', dep, 'key', key, 'newValue', newVal)
-      if(key === length || key > newVal) { // newVal = state.arr.length  你改的长度比收集的的索引小了， 那收集对应的Effecct也要执行, 要将收集的索引置为empty
+      if(key === 'length' || key > newVal) { // newVal = state.arr.length  你改的长度比收集的的索引小了， 那收集对应的Effecct也要执行, 要将收集的索引置为empty
+        console.log('>dep>', dep)
         add(dep)
       }
     })
+  } else {
+    // 改的不是数组 可能是个对象
+    // 修改值
+    if(key !== undefined) { // 修改对象· （对象的修改新增，数组有效索引的修改） 有效索引 -> 该索引小于等于数组的长度
+      add(depsMap.get(key))
+    }
+    // 如果修改数组中的某一个索引 怎么办? 也要触发length
+    switch(type) { // 如果添加一个索引的话就是触发长度的更新
+      case TriggerOpTypes.ADD:
+        // 如果是数组，并且修改了索引
+        if(isArray(target) && isInTegerKey(key)) {
+          // 拿到的是length收集的effects的集合
+          add(depsMap.get('length'))
+        }
+    }
   }
+  console.log('>>effects>>', effects)
+  console.log('target', target, 'depsMap', depsMap,  'key', key, 'type', type)
+  effects.forEach((effect: Function) => effect())
 }
 
 // {name: 'berlon', age: 12} => name => [effect, effect]

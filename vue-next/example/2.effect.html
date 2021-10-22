@@ -20,17 +20,16 @@
         name: 'berlin',
         age: '33',
         other: 'xxx',
-        arr:  [1, 2,3 ]
+        arr:  [1, 2,  3]
       })
 
-
-
      effect(() => {
-      app.innerHTML = state.arr[2] + state.arr.length
+      console.log('render')
+      app.innerHTML = state.arr
      })
 
      setTimeout(() => {
-       state.arr.length = 1
+       state.arr[100] = 4
      }, 1000)
     </script>
 </body>
