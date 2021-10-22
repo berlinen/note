@@ -19,25 +19,18 @@
       let state = reactive({
         name: 'berlin',
         age: '33',
-        other: 'xxx'
+        other: 'xxx',
+        arr:  [1, 2,3 ]
       })
 
-      let state1 = reactive({
-        name: 'berlin2',
-        age: '22',
-        other: 'xxx2'
-      })
+
 
      effect(() => {
-      app.innerHTML = state.name + state.age + state.other + state1.name
-     })
-
-     effect(() => {
-      app.innerHTML = state.name +  + state.other
+      app.innerHTML = state.arr[2] + state.arr.length
      })
 
      setTimeout(() => {
-       state.other = 'x'
+       state.arr.length = 1
      }, 1000)
     </script>
 </body>

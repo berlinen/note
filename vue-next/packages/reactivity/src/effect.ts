@@ -1,3 +1,5 @@
+import { isArray } from "@vue/shared"
+
 // 副作用函数
 let uid = 0
 let activeEffect // 存储当前的effect
@@ -59,12 +61,33 @@ const track = (target, type, key) => { // 可以拿到当前的effect
     dep.add(activeEffect)
   }
 
-  console.log(targetMap)
+  // console.log(targetMap)
 
 }
 
 const trigger = (target, type, key?, newVal?, oldValue?) => {
+  // 如果这个属性没有收集过effect， 那不需要做任何操作
+  const depsMap = targetMap.get(target)
+  if(!depsMap) return
 
+  const effects = new Set()
+  const add = effectsToAdd => {
+    if(effectsToAdd) {
+      effectsToAdd.forEach(effect => effects.add(effect))
+    }
+  }
+  // 将所有的要执行的effect全部存到一个新的集合中，最终一起执行
+
+  // 1. 看修改的是不是数组的长度，修改长度影响范围比较广
+  if(isArray(target) && key === 'length') {
+    // 如果对应的长度有依赖收集，需要更新
+    depsMap.forEach((dep, key) => {
+      console.log('depsMap', depsMap, 'dep', dep, 'key', key, 'newValue', newVal)
+      if(key === length || key > newVal) { // newVal = state.arr.length  你改的长度比收集的的索引小了， 那收集对应的Effecct也要执行, 要将收集的索引置为empty
+        add(dep)
+      }
+    })
+  }
 }
 
 // {name: 'berlon', age: 12} => name => [effect, effect]
