@@ -26,9 +26,11 @@
       // console.log('name', name)
 
       // let { name } = state
-      let ret = toRefs(state)
+      // let ret = toRefs(state)
+      // or
+      let { name, age } = toRefs(state) // 有的时候就想转化一个特定的属性，toRefs就浪费性能了
       effect(() => {
-        app.innerHTML = ret.name.value + ret.age.value
+        app.innerHTML = name.value + age.value
       })
 
       setTimeout(() => {
