@@ -25,11 +25,11 @@
 
      effect(() => {
       console.log('render')
-      app.innerHTML = state.arr
+      app.innerHTML = state.xx
      })
 
      setTimeout(() => {
-       state.arr[100] = 4
+       state.xx = '222'
      }, 1000)
     </script>
 </body>
