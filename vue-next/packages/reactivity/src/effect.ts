@@ -106,8 +106,8 @@ const trigger = (target, type, key?, newVal?, oldValue?) => {
         }
     }
   }
-  console.log('>>effects>>', effects)
-  console.log('target', target, 'depsMap', depsMap,  'key', key, 'type', type)
+  // console.log('>>effects>>', effects)
+  // console.log('target', target, 'depsMap', depsMap,  'key', key, 'type', type)
   effects.forEach((effect: Function) => effect())
 }
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+
+  <script>
+     let {
+        effect,
+        reactive,
+        ref,
+        shallowRef,
+        toRef
+      } = VueReactivity
+      let state = reactive({name: 'berlin', age: 24})
+
+      // // let name = ref('berlin')
+      let name = toRef(state, 'name')
+      // console.log('name', name)
+
+      // let { name } = state
+      effect(() => {
+        app.innerHTML = name.value
+      })
+
+      setTimeout(() => {
+        state.name = 'linlai'
+      }, 1000)
+  </script>
+</body>
+</html>

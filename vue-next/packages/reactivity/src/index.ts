@@ -11,3 +11,10 @@ export {
   track
 } from './effect'
 
+export {
+  ref,
+  shallowRef,
+  toRef,
+  toRefs
+} from './ref'
+
