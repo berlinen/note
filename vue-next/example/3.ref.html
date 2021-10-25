@@ -16,21 +16,24 @@
         reactive,
         ref,
         shallowRef,
-        toRef
+        toRef,
+        toRefs
       } = VueReactivity
-      let state = reactive({name: 'berlin', age: 24})
+      let state = reactive({name: 'berlin', age: '24'})
 
       // // let name = ref('berlin')
-      let name = toRef(state, 'name')
+     // let name = toRef(state, 'name')
       // console.log('name', name)
 
       // let { name } = state
+      let ret = toRefs(state)
       effect(() => {
-        app.innerHTML = name.value
+        app.innerHTML = ret.name.value + ret.age.value
       })
 
       setTimeout(() => {
         state.name = 'linlai'
+        state.age = '25'
       }, 1000)
   </script>
 </body>

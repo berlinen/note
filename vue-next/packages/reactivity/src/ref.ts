@@ -1,4 +1,4 @@
-import { hasChange, isObject } from "@vue/shared"
+import { hasChange, isArray, isObject } from "@vue/shared"
 import { reactive } from "."
 import { track, trigger } from "./effect"
 import { TrackOpTypes, TriggerOpTypes } from "./operators"
@@ -66,8 +66,14 @@ export function toRef(target, key) {// 可以把一个对象的key转化成ref
    return new ObjectRefImpl(target, key)
 }
 
-export function toRefs(target, key) {
-  
+export function toRefs(target) { // 可能传递的是一个对象或者是一个数组
+  const ret = isArray(target) ? new Array(target.length) : {}
+
+  for(let key in target) {
+    ret[key] = toRef(target, key)
+  }
+
+  return ret
 }
 
 // vue  的源码 基本上都是高阶函数  做了类似克里化的功能
