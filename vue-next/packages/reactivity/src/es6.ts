@@ -32,6 +32,7 @@ let c = deepClone(objs)
 
 console.log(c)
 
+//@ts-ignore
 Array.prototype.reduce = function(callback, prev) {
   console.log(this)
  for(let i = 0; i < this.length; i++) {
