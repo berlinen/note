@@ -28,12 +28,16 @@
         return age.value + 10
       })
 
+      effect(() => {
+        console.log(myAge.value)
+      })
+
       // 当属性访问的时候执行
-      console.log(myAge.value)
-      console.log(myAge.value)
+      // console.log(myAge.value)
+      // console.log(myAge.value)
 
       age.value = 100
-      myAge.value
+      // myAge.value
 
   </script>
 </body>
