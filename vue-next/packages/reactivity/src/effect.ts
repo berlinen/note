@@ -108,7 +108,13 @@ const trigger = (target, type, key?, newVal?, oldValue?) => {
   }
   // console.log('>>effects>>', effects)
   // console.log('target', target, 'depsMap', depsMap,  'key', key, 'type', type)
-  effects.forEach((effect: Function) => effect())
+  effects.forEach((effect: any) => {
+    if(effect.options.scheduler) {
+      effect.options.scheduler()
+    } else {
+      effect()
+    }
+  })
 }
 
 // {name: 'berlon', age: 12} => name => [effect, effect]
