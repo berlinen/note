@@ -17,7 +17,6 @@ export const renderOptions = extend({patchProp}, nodeOps)
 
 // 用户调用的是runtime-dom -> runtime-core
 
-
 // vue中 runtime-dom 提供了核心的方法，用来处理渲染逻辑，会使用runtime-dom中的api进行渲染
 export const createApp = (rootComponent, rootProps = null) => {
   const app = createRenderer(renderOptions).createApp(rootComponent, rootProps)
