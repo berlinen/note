@@ -1,1 +1,3 @@
-export const obj = {}
+export {
+  createRenderer
+} from './renderer'

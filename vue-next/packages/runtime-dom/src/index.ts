@@ -1,6 +1,7 @@
 // runtime-dom 核心就是 提供domApi 方法 操作节点 操作属性的更新
 
 import { extend } from '@vue/shared'
+import { createRenderer } from '@vue/runtime-core'
 
 // 节点操作就是增删改吃
 
@@ -13,18 +14,6 @@ import { patchProp } from './patchProp'
 
 // 渲染时用到的所有方法 理解成平台渲染的一些方法
 export const renderOptions = extend({patchProp}, nodeOps)
-
-function createRenderer(renderOptions) {
-  return {
-    createApp(rootComponent, rootProps) {
-      return {
-        mount(container) {
-
-        }
-      }
-    }
-  }
-}
 
 // 用户调用的是runtime-dom -> runtime-core
 
