@@ -21,3 +21,5 @@ export {
   hasOwn,
   hasChange
 }
+
+export * from './shapeFlag'
