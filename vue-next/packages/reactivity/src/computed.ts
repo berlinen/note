@@ -15,6 +15,7 @@ class ComputedRefImpl {
         scheduler: () => {
           if(!this._dirty) {
             this._dirty = true
+            // 自己收集的effect也要执行
             trigger(this, TriggerOpTypes.SET, 'value')
           }
         }
