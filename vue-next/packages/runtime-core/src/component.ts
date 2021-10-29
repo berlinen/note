@@ -46,13 +46,32 @@ const setupStatefulComponent = (instance) => {
   // 2. 获取组件的类型 拿到组件的setup方法
   let Component = instance.type
   let { setup } = Component
-  let setupContext = createConttext(instance)
-  // --------
-  setup(instance.props, setupContext) // instance 中的props attrs slots emit expose 会被提取出来，因为在开发过程中会使用这些属性
+
+  // ----  没有setup ？ 没有 render ？----
+  if(setup) {
+    let setupContext = createContext(instance)
+    setup(instance.props, setupContext) // instance 中的props attrs slots emit expose 会被提取出来，因为在开发过程中会使用这些属性
+  } else {
+    finishComponentSetup(instance) // 完成组件的启动
+  }
+
+
+
+
+
   Component.render(instance.proxy)
 }
 
-const createConttext = instance => {
+const finishComponentSetup = instance => {
+  let Component = instance.type
+  let { render } = Component
+  if(!render) {
+    // 对template模版进行编译 产生render函数
+    instance.render = render // 需要将生成的render函数放在实例上
+  }
+}
+
+const createContext = instance => {
   return {
     attrs: instance.attrs,
     props: instance.props,
@@ -62,3 +81,10 @@ const createConttext = instance => {
 
   }
 }
+
+
+// instance 表示组件的 状态 各种各样的状态 组件的相关信息
+
+// context 就四个参数 为了开发使用
+
+// proxy 为了取值方便 => proxy.xxx
