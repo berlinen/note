@@ -1,6 +1,7 @@
 // 组件中所有的方法
 
 import { ShapeFlags } from "@vue/shared"
+import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
 
 
 export const createComponentInstance = (vnode) => {
@@ -12,7 +13,8 @@ export const createComponentInstance = (vnode) => {
     attrs: {},
     slots: {},
     ctx: {}, // 上下文
-    setupState: {}, // 如果setup返回一个对象， 这个对象会作为etUpState
+    data: {c: 3},
+    setupState: {b: 2}, // 如果setup返回一个对象， 这个对象会作为etUpState
     render: null,
     isMounted: false // 表示这个组件是否有挂载过
   }
@@ -40,14 +42,14 @@ export const setupComponent = (instance) => {
 
 const setupStatefulComponent = (instance) => {
   // 1. 代理 传递给render函数的参数
-  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers)
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers as any)
   // 2. 获取组件的类型 拿到组件的setup方法
   let Component = instance.type
   let { setup } = Component
   let setupContext = createConttext(instance)
   // --------
   setup(instance.props, setupContext) // instance 中的props attrs slots emit expose 会被提取出来，因为在开发过程中会使用这些属性
-  Component.render()
+  Component.render(instance.proxy)
 }
 
 const createConttext = instance => {
