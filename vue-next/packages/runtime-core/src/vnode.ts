@@ -2,6 +2,10 @@
 
 import { isArray, isObject, isString, ShapeFlags } from "@vue/shared"
 
+export const isVnode = (vnode) => {
+  return vnode.__v__isVnode
+}
+
 // h('div', { style: {}, className: ''}, 'children')
 export const createVnode = (type, props, children = null) => {
   // 可以根据type来区分时组件还是普通元素

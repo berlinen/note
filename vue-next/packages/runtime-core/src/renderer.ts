@@ -14,15 +14,18 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
       // 初次渲染
       if(!instance.isMounted) {
         let proxyToUse = instance.proxy
-        instance.render.call(proxyToUse, proxyToUse)
+        // $vnode _vnode
+        // vnode subtree
+        let subTree = instance.subTree = instance.render.call(proxyToUse, proxyToUse)
+        console.log('>>subTree>>', subTree)
         instance.isMounted = true
       } else {
         // 更新逻辑
-        // return h('div', {}, '') 
+        // return h('div', {}, '')
         // h 写法有几种 俩个参数的情况
       }
     })
-    instance.render()
+    // instance.render()
   }
 
   const mountComponent = (initialVnode, container) => {
