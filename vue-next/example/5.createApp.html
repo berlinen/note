@@ -15,11 +15,13 @@
 
      let App = { // getCurrentInstance => instance
       setup(props, context) { // instance里边包含的内容 会提取一些传递给 context
-        console.log('ok', props, 'ss', context)
+         return (proxy) => {
+          onsole.log('setup render')
+         }
       },
       render(proxy) { // effect 函数 数据变化会重新渲染
         // proxy 代理
-        console.log('render', proxy.age, proxy.b, proxy.c)
+        console.log('component render')
       }
      }
 

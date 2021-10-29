@@ -1,6 +1,6 @@
 // 组件中所有的方法
 
-import { ShapeFlags } from "@vue/shared"
+import { isFunction, isObject, ShapeFlags } from "@vue/shared"
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
 
 
@@ -50,25 +50,37 @@ const setupStatefulComponent = (instance) => {
   // ----  没有setup ？ 没有 render ？----
   if(setup) {
     let setupContext = createContext(instance)
-    setup(instance.props, setupContext) // instance 中的props attrs slots emit expose 会被提取出来，因为在开发过程中会使用这些属性
+    const setupResult = setup(instance.props, setupContext) // instance 中的props attrs slots emit expose 会被提取出来，因为在开发过程中会使用这些属性
+    handleSetupResult(instance, setupResult)
   } else {
     finishComponentSetup(instance) // 完成组件的启动
   }
 
-
-
-
-
   Component.render(instance.proxy)
+}
+
+// 根据表现， setup返回render优先级高于 外部render
+const handleSetupResult = (instance, setupResult) => {
+  if(isFunction(setupResult)) {
+    instance.render = setupResult
+  } else if(isObject(setupResult)) {
+    instance.setupState = setupResult
+  }
+  finishComponentSetup(instance)
 }
 
 const finishComponentSetup = instance => {
   let Component = instance.type
-  let { render } = Component
-  if(!render) {
+  if(!instance.render) {
     // 对template模版进行编译 产生render函数
-    instance.render = render // 需要将生成的render函数放在实例上
+    if(!Component.render && Component.template) {
+      // 编译 将结果赋值给Component.render
+    }
+    instance.render = Component.render // 需要将生成的render函数放在实例上
   }
+  console.log('instance>>', JSON.stringify(instance.render.toString()))
+  // 对v2做了兼容性处理
+  // applyOptions
 }
 
 const createContext = instance => {
