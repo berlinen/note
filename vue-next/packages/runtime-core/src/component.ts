@@ -56,7 +56,7 @@ const setupStatefulComponent = (instance) => {
     finishComponentSetup(instance) // 完成组件的启动
   }
 
-  Component.render(instance.proxy)
+  // Component.render(instance.proxy)
 }
 
 // 根据表现， setup返回render优先级高于 外部render
@@ -71,6 +71,7 @@ const handleSetupResult = (instance, setupResult) => {
 
 const finishComponentSetup = instance => {
   let Component = instance.type
+  // 所以setup render优先级高于 普通render
   if(!instance.render) {
     // 对template模版进行编译 产生render函数
     if(!Component.render && Component.template) {

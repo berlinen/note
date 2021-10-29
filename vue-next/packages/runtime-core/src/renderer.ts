@@ -1,3 +1,4 @@
+import { effect } from '@vue/reactivity'
 import { ShapeFlags } from '@vue/shared'
 import { createAppApi } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component'
@@ -8,6 +9,19 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
   const setupRenderEffect = (instance) => {
     // 需要创建一个 effect，在effect中调用render方法。
     // 这样render方法中拿到的数据会收集这个effect。属性更新的时候effect会重新执行
+    effect(() => {
+      // 每个组件都有一个effect vue3 是组件级别更新 数据辩护会重新执行对应组件的effect
+      // 初次渲染
+      if(!instance.isMounted) {
+        let proxyToUse = instance.proxy
+        instance.render.call(proxyToUse, proxyToUse)
+        instance.isMounted = true
+      } else {
+        // 更新逻辑
+        // return h('div', {}, '') 
+        // h 写法有几种 俩个参数的情况
+      }
+    })
     instance.render()
   }
 

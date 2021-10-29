@@ -11,18 +11,18 @@
   <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
 
   <script>
-     let { createApp } = VueRuntimeDom
+     let { createApp, h } = VueRuntimeDom
 
      let App = { // getCurrentInstance => instance
       setup(props, context) { // instance里边包含的内容 会提取一些传递给 context
          return (proxy) => {
-          console.log('setup render')
+           return h('div', {props: 1}, 'hello vue 3')
          }
       },
-      render(proxy) { // effect 函数 数据变化会重新渲染
-        // proxy 代理
-        console.log('component render')
-      }
+      // render(proxy) { // effect 函数 数据变化会重新渲染
+      //   // proxy 代理
+      //   console.log('component render')
+      // }
      }
 
      createApp(App, { name: 'berlin', age: 12 }).mount('#app')
