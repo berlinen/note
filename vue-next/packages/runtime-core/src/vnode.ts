@@ -17,6 +17,7 @@ export const createVnode = (type, props, children = null) => {
     type,
     props,
     children,
+    component: null, // 存放组件对应的实例
     el: null, // 稍后会将虚拟节点和真实节点对应起来
     key: props && props.key, // diff方法会用到key
     shapeFlag

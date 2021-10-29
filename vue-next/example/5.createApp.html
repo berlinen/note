@@ -14,8 +14,11 @@
      let { createApp } = VueRuntimeDom
 
      let App = {
-      render() {
-        console.log('zz')
+      setup(props, context) {
+
+      },
+      render(proxy) { // effect 函数 数据变化会重新渲染
+        console.log('render')
       }
      }
 
