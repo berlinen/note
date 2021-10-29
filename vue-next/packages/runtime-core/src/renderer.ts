@@ -6,7 +6,7 @@ import { createComponentInstance, setupComponent } from './component'
 // 目的是创建一个渲染器
 // 组件生成虚拟dom 虚拟dom生成真实dom渲染到页面上
 export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 平台有关 小程序 浏览器
-  const setupRenderEffect = (instance) => {
+  const setupRenderEffect = (instance, container) => {
     // 需要创建一个 effect，在effect中调用render方法。
     // 这样render方法中拿到的数据会收集这个effect。属性更新的时候effect会重新执行
     effect(() => {
@@ -17,7 +17,8 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
         // $vnode _vnode
         // vnode subtree
         let subTree = instance.subTree = instance.render.call(proxyToUse, proxyToUse)
-        console.log('>>subTree>>', subTree)
+        // 用render函数的返回值继续渲染
+        patch(null, subTree, container)
         instance.isMounted = true
       } else {
         // 更新逻辑
@@ -35,7 +36,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     // 2. 需要的数据解析到实例上
     setupComponent(instance) // state props attrs render
     // 3. 创建一个effect 让render函数执行
-    setupRenderEffect(instance)
+    setupRenderEffect(instance, container)
   }
 
 
@@ -53,6 +54,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     // 针对不同类型 做初始化操作
     const { shapeFlag } = n2
     if(shapeFlag & ShapeFlags.ELEMENT) {
+      console.log('>>>element>>', n1, 'n2', n2, 'con', container)
       // element
     } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
       // component
