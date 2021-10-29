@@ -9,7 +9,7 @@ export const enum ShapeFlags {
   SUSPENSE = 1 << 7, // 128
   COMPONENT_SHOULD_KEEP_ALIVE = 1 << 8, // 256
   COMPONENT_KEPT_ALIVE = 1 << 9, // 512
-  COMPONENT = ShapeFlags.STATEFUL_COMPONENT | ShapeFlags.FUNCTIONAL_COMPONENT
+  COMPONENT = ShapeFlags.STATEFUL_COMPONENT | ShapeFlags.FUNCTIONAL_COMPONENT // 6
 }
 
 // 2进制 一个字节8位组成 8位组大都是1
@@ -17,3 +17,10 @@ export const enum ShapeFlags {
 // ｜ 有一个1就是1
 
 // & 全是1 才是 1
+
+// 6 & 2   2
+
+// 6 & 4   4
+
+
+// 6 & 8  0
