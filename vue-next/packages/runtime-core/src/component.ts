@@ -34,11 +34,29 @@ export const setupComponent = (instance) => {
 
   if(isStateFulComponent) { // 表示一个带状态的组件
     // 调用当前实例的setup 方法， 用setup的返回值填充 setupState和对应的render方法
-
     setupStatefulComponent(instance)
   }
 }
 
 const setupStatefulComponent = (instance) => {
+  // 1. 代理 传递给render函数的参数
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers)
+  // 2. 获取组件的类型 拿到组件的setup方法
+  let Component = instance.type
+  let { setup } = Component
+  let setupContext = createConttext(instance)
+  // --------
+  setup(instance.props, setupContext) // instance 中的props attrs slots emit expose 会被提取出来，因为在开发过程中会使用这些属性
+  Component.render()
+}
 
+const createConttext = instance => {
+  return {
+    attrs: instance.attrs,
+    props: instance.props,
+    slots: instance.slots,
+    emit: () => {},
+    expose: () => {},
+
+  }
 }
