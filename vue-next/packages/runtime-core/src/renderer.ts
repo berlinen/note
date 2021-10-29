@@ -5,16 +5,20 @@ import { createComponentInstance, setupComponent } from './component'
 // 目的是创建一个渲染器
 // 组件生成虚拟dom 虚拟dom生成真实dom渲染到页面上
 export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 平台有关 小程序 浏览器
-  const setupRenderEffect = () => {}
+  const setupRenderEffect = (instance) => {
+    // 需要创建一个 effect，在effect中调用render方法。
+    // 这样render方法中拿到的数据会收集这个effect。属性更新的时候effect会重新执行
+    instance.render()
+  }
 
   const mountComponent = (initialVnode, container) => {
     // 组件的渲染流程 最核心的就是调用setup 拿到的返回值，获取render函数返回的结果来进行渲染
     // 1. 先有实例
     const instance = initialVnode.component = createComponentInstance(initialVnode)
     // 2. 需要的数据解析到实例上
-    setupComponent(instance)
+    setupComponent(instance) // state props attrs render
     // 3. 创建一个effect 让render函数执行
-    setupRenderEffect()
+    setupRenderEffect(instance)
   }
 
 

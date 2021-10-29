@@ -16,7 +16,7 @@
      let App = { // getCurrentInstance => instance
       setup(props, context) { // instance里边包含的内容 会提取一些传递给 context
          return (proxy) => {
-          onsole.log('setup render')
+          console.log('setup render')
          }
       },
       render(proxy) { // effect 函数 数据变化会重新渲染
