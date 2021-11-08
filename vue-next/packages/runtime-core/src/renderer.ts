@@ -49,13 +49,27 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     }
   }
 
+  // ------------------------------------------------------组件
+
+
+  // -----------------------------------------------------元素
+
+  const mountElemet = (n2, container) => {
+     
+  }
+
+  const processElement = (n1, n2, container) => {
+     if(n1 === null) {
+      mountElemet(n2, container)
+     }
+  }
 
   const patch = (n1, n2, container) => {
     // 针对不同类型 做初始化操作
     const { shapeFlag } = n2
     if(shapeFlag & ShapeFlags.ELEMENT) {
-      console.log('>>>element>>', n1, 'n2', n2, 'con', container)
       // element
+      processElement(n1, n2, container)
     } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
       // component
       processComponent(n1, n2, container)
