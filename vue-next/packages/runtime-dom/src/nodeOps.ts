@@ -1,7 +1,7 @@
 export const nodeOps = {
   // crateElement 不同平台创建方式不同
 
-  createElemet: tagName => document.createElement(tagName), // 增加
+  createElement: tagName => document.createElement(tagName), // 增加
 
   remove: child => { // 删除
     const parent = child.parentNode

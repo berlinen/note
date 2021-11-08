@@ -43,3 +43,7 @@ const normalizeChildren = (vnode, children) => {
 
   vnode.shapeFlag |= type
 }
+
+export const normalizeVNode = (child) => {
+
+}

@@ -6,6 +6,16 @@ import { createComponentInstance, setupComponent } from './component'
 // 目的是创建一个渲染器
 // 组件生成虚拟dom 虚拟dom生成真实dom渲染到页面上
 export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 平台有关 小程序 浏览器
+  const {
+    insert: hostInsert,
+    remove: hostRemove,
+    patchProp: hostPatchProp,
+    createElement: hostCreateElement,
+    createText: hostCreateText,
+    createComment: hostCreateComment,
+    setText: hostSetText,
+    setElementText: hostSetElementText,
+  } = renderOptions
   const setupRenderEffect = (instance, container) => {
     // 需要创建一个 effect，在effect中调用render方法。
     // 这样render方法中拿到的数据会收集这个effect。属性更新的时候effect会重新执行
@@ -54,8 +64,29 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
 
   // -----------------------------------------------------元素
 
-  const mountElemet = (n2, container) => {
-     
+  // 挂载children
+
+  const mountChildren = (container, el) => {
+    for(let i = 0; i < mountChildren.length; i++) {
+      let child = normalizeVNode(children[i])
+    }
+  }
+
+  const mountElemet = (vnode, container) => {
+     // 递归渲染
+     const { props, shapeFlag, type, children } = vnode
+     let el = (vnode.el = hostCreateElement(type))
+     if(props) {
+       for(const key in props) {
+         hostPatchProp(el, key, null, props[key])
+       }
+     }
+      if(shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+        hostSetElementText(el, children)
+     } else if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+      mountChildren(children, el )
+     }
+     hostInsert(el, container)
   }
 
   const processElement = (n1, n2, container) => {

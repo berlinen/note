@@ -79,7 +79,6 @@ const finishComponentSetup = instance => {
     }
     instance.render = Component.render // 需要将生成的render函数放在实例上
   }
-  console.log('instance>>', JSON.stringify(instance.render.toString()))
   // 对v2做了兼容性处理
   // applyOptions
 }
