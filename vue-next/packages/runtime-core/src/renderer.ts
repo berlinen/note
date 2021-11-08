@@ -2,6 +2,7 @@ import { effect } from '@vue/reactivity'
 import { ShapeFlags } from '@vue/shared'
 import { createAppApi } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component'
+import { normalizeVNode, TEXT } from './vnode'
 
 // 目的是创建一个渲染器
 // 组件生成虚拟dom 虚拟dom生成真实dom渲染到页面上
@@ -64,11 +65,21 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
 
   // -----------------------------------------------------元素
 
-  // 挂载children
+  //------------------------------------------------------处理文本
 
-  const mountChildren = (container, el) => {
-    for(let i = 0; i < mountChildren.length; i++) {
+  const processText = (n1, n2, container) => {
+    if(n1 === null) {
+      console.log('>>>n2>>', n2)
+      hostInsert(n2.el = hostCreateText(n2.children), container)
+    }
+  }
+
+  // 挂载children
+  const mountChildren = (children, container) => {
+    for(let i = 0; i < children.length; i++) {
       let child = normalizeVNode(children[i])
+
+      patch(null, child, container)
     }
   }
 
@@ -84,7 +95,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
       if(shapeFlag & ShapeFlags.TEXT_CHILDREN) {
         hostSetElementText(el, children)
      } else if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-      mountChildren(children, el )
+      mountChildren(children, el)
      }
      hostInsert(el, container)
   }
@@ -97,14 +108,22 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
 
   const patch = (n1, n2, container) => {
     // 针对不同类型 做初始化操作
-    const { shapeFlag } = n2
-    if(shapeFlag & ShapeFlags.ELEMENT) {
-      // element
-      processElement(n1, n2, container)
-    } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-      // component
-      processComponent(n1, n2, container)
+    const { shapeFlag, type } = n2
+    switch(type) {
+      case TEXT:
+        processText(n1, n2, container)
+        break;
+      default:
+        if(shapeFlag & ShapeFlags.ELEMENT) {
+          // element
+          processElement(n1, n2, container)
+        } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+          // component
+          processComponent(n1, n2, container)
+        }
+        break;
     }
+
   }
 
   const render = (vnode, container) => {

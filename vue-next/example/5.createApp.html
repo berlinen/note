@@ -17,7 +17,8 @@
       setup(props, context) { // instance里边包含的内容 会提取一些传递给 context
         console.log('>>>props>>>', context)
          return (proxy) => {
-           return h('div', {style: { color: 'red' }, onClick: () => {alert(1)}}, 'hello vue 3')
+           // return h('div', {style: { color: 'red' }, onClick: () => {alert(1)}}, ['hello vue 3', ' zzz'])
+           return h('div', {style: { color: 'red' }, onClick: () => {alert(1)}}, h('span', 'hello'))
          }
       },
       // render(proxy) { // effect 函数 数据变化会重新渲染
