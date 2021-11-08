@@ -3,6 +3,7 @@ import { ShapeFlags } from '@vue/shared'
 import { createAppApi } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component'
 import { normalizeVNode, TEXT } from './vnode'
+import { queueJob } from './scheduler'
 
 // 目的是创建一个渲染器
 // 组件生成虚拟dom 虚拟dom生成真实dom渲染到页面上
@@ -33,12 +34,15 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
         instance.isMounted = true
       } else {
         // 更新逻辑
-        // return h('div', {}, '')
-        // h 写法有几种 俩个参数的情况
+        console.log('update')
       }
+    }, {
+      scheduler: queueJob
     })
     // instance.render()
   }
+
+  // ------------------------------------------------------组件
 
   const mountComponent = (initialVnode, container) => {
     // 组件的渲染流程 最核心的就是调用setup 拿到的返回值，获取render函数返回的结果来进行渲染
@@ -57,19 +61,14 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
       mountComponent(n2, container)
     } else {
       // 组件更新流程
+
     }
   }
-
-  // ------------------------------------------------------组件
-
-
-  // -----------------------------------------------------元素
 
   //------------------------------------------------------处理文本
 
   const processText = (n1, n2, container) => {
     if(n1 === null) {
-      console.log('>>>n2>>', n2)
       hostInsert(n2.el = hostCreateText(n2.children), container)
     }
   }
@@ -99,6 +98,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
      }
      hostInsert(el, container)
   }
+  // -----------------------------------------------------元素
 
   const processElement = (n1, n2, container) => {
      if(n1 === null) {

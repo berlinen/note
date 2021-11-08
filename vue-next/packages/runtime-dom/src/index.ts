@@ -37,3 +37,5 @@ export const createApp = (rootComponent, rootProps = null) => {
 
 export * from '@vue/runtime-core'
 
+// 用户调用的是runtime-dom -> runtime-core
+

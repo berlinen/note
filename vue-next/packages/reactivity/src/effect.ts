@@ -110,7 +110,7 @@ const trigger = (target, type, key?, newVal?, oldValue?) => {
   // console.log('target', target, 'depsMap', depsMap,  'key', key, 'type', type)
   effects.forEach((effect: any) => {
     if(effect.options.scheduler) {
-      effect.options.scheduler()
+      effect.options.scheduler(effect)
     } else {
       effect()
     }

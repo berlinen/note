@@ -11,14 +11,18 @@
   <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
 
   <script>
-     let { createApp, h } = VueRuntimeDom
+     let { createApp, h, reactive } = VueRuntimeDom
 
      let App = { // getCurrentInstance => instance
       setup(props, context) { // instance里边包含的内容 会提取一些传递给 context
-        console.log('>>>props>>>', context)
+        let state = reactive({name: 'berlin'})
+        let fn = function() {
+          state.name = 'mengtian'
+        }
          return (proxy) => {
            // return h('div', {style: { color: 'red' }, onClick: () => {alert(1)}}, ['hello vue 3', ' zzz'])
-           return h('div', {style: { color: 'red' }, onClick: () => {alert(1)}}, h('span', 'hello'))
+           // return h('div', {style: { color: 'red' }, onClick: () => {alert(1)}}, h('span', 'hello'))
+           return h('div',{onClick: fn}, state.name)
          }
       },
       // render(proxy) { // effect 函数 数据变化会重新渲染
