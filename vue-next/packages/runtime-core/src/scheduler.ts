@@ -4,6 +4,7 @@ let queue = []
 export function queueJob(job) {
   if(!queue.includes(job)) {
     queue.push(job)
+    // 队列刷新
     queueFlush()
   }
 }
