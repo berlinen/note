@@ -151,6 +151,30 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     }
   }
 
+  const patchKeyedChildren = (c1, c2, el) => {
+    // v3 特殊情况进行优化
+    let i = 0 // 默认从头比对
+    let e1  = c1.length -1
+    let e2 = c2.length - 1
+
+    // 尽可能减少比对的区域
+
+    // sync from start 从头开始一个个逼 遇到不同就停止
+    while(i <= e1 && i <= e2) {
+       const n1 = c1[i]
+       let n2 = c2[i]
+       if(isSameVNodeType(n1, n2)) {
+         patch(n1, n2, el)
+       } else {
+         break
+       }
+       i++
+    }
+
+    console.log(i, e1, e2)
+
+  }
+
   const patchChildren = (n1, n2, el) => {
     const c1 = n1.children
     const c2 = n2.children
@@ -162,25 +186,33 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     if(shapeFlag & ShapeFlags.TEXT_CHILDREN) {
 
       // 老的事n个孩子 但是新的是文本
-      if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+      if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) { // case1: 现在是文本 之前是数组
         unmountChildren(c1) // 如果c1包含组件会调用销毁方法
       }
       // 两个都是文本的情况
-      if(c2 !== c1) {
+      if(c2 !== c1) { //case2: 两个都是文本
         hostSetElementText(el, c2)
       }
     } else {
       // 现在是元素 上一次有可能是文本或者是数组
-      if(prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+      if(prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) { // case3: 两个都是数组
         if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
           // 当前是元素 之前是数组 或者是文本
           // 两个数组的比对 diff算法
+         patchKeyedChildren(c1, c2, el)
         } else {
           // 没有孩子 特殊情况 当前是null 删除掉老的
           unmountChildren(c1) // 删除老的
         }
       } else {
+        // 上一次是文本
+        if(prevShapeFlag & ShapeFlags.TEXT_CHILDREN) { // case4: 现在是数组，之前是文本
+          hostSetElementText(el, '')
+        }
 
+        if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          mountChildren(c2, el)
+        }
       }
     }
   }

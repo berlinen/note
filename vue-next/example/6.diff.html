@@ -22,8 +22,16 @@
 
         return () => {
           return state.flag ?
-            h('div', { style: { color: 'red' }}, [h('span', 'hello'), h('span', 'hello')]) :
-            h('div', { style: { color: 'blue' }}, h('span', 'hello'))
+            h('div', { style: { color: 'red' }}, [
+              h('li', {key: 'a'}, 'a'),
+              h('li', {key: 'b'}, 'b'),
+              h('li', {key: 'c'}, 'c')
+            ]) :
+            h('div', { style: { color: 'blue' }}, [
+              h('li', {key: 'a'}, 'a'),
+              h('li', {key: 'b'}, 'b'),
+              h('li', {key: 'd'}, 'd'),
+            ])
         }
       },
 
