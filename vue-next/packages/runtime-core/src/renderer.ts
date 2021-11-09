@@ -145,12 +145,44 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     }
   }
 
-  const patchChildren = (n1, n2, container) => {
+  const unmountChildren = (children) => {
+    for(let i = 0; i < children.length; i++) {
+      unMount(children[i])
+    }
+  }
+
+  const patchChildren = (n1, n2, el) => {
     const c1 = n1.children
     const c2 = n2.children
 
     // 老得有儿子新的没儿子 新的有儿子老得没儿子 新老都有儿子  新老都是文本
-    const 
+    const prevShapeFlag = n1.shapeFlag
+    const shapeFlag = n2.shapeFlag
+
+    if(shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+
+      // 老的事n个孩子 但是新的是文本
+      if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        unmountChildren(c1) // 如果c1包含组件会调用销毁方法
+      }
+      // 两个都是文本的情况
+      if(c2 !== c1) {
+        hostSetElementText(el, c2)
+      }
+    } else {
+      // 现在是元素 上一次有可能是文本或者是数组
+      if(prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          // 当前是元素 之前是数组 或者是文本
+          // 两个数组的比对 diff算法
+        } else {
+          // 没有孩子 特殊情况 当前是null 删除掉老的
+          unmountChildren(c1) // 删除老的
+        }
+      } else {
+
+      }
+    }
   }
 
   const isSameVNodeType = (n1, n2) => {
@@ -163,9 +195,10 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
   }
 
   const patch = (n1, n2, container, anchor =  null) => {
+
     // 针对不同类型 做初始化操作
     const { shapeFlag, type } = n2
-    if(n1 && isSameVNodeType(n1, n2)) {
+    if(n1 && !isSameVNodeType(n1, n2)) {
       // 把以前的删除 换成n2
       anchor = hostNextSibling(n1.el)
       unMount(n1)
