@@ -157,9 +157,6 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     let e1  = c1.length -1
     let e2 = c2.length - 1
 
-    console.log('>>>e1>>', c1)
-    console.log('>>>e2>>', c2)
-
     // 尽可能减少比对的区域
 
     // sync from start 从头开始一个个逼 遇到不同就停止
@@ -199,12 +196,29 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
           i++
         }
       }
-    } else { // 老的多新的少
+    } else if(i > e2) { // 老的多新的少 有一方已经完全比对完成了
+      while(i <= e1) {
+        unMount(c1[i])
+        i++
+      }
+    } else {
+      // 乱序比较需要尽可能复用， 用新的元素做成一个映射表去老的里面去找
+      let s1 = i
+      let s2 = i
 
+      // v3用新的做映射表 v2 用老的
+
+      const keyToNewIndexMap = new Map()
+      for(let i = s2; i <= e2; i++) {
+        const childVnode = c2[i] // child vnode
+        keyToNewIndexMap.set(childVnode.key, i)
+      }
+
+      console.log(keyToNewIndexMap)
     }
 
-
     console.log(i, e1, e2)
+
 
   }
 
