@@ -115,7 +115,42 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
 
   // 比对元素
   const patchElement = (n1, n2, container) => {
+    // 元素是相同节点
+    let el = (n2.el = n1.el)
 
+    // 更新属性 更新儿子
+    const oldProps = n1.props || {}
+    const newProps = n2.props || {}
+
+    patchProps(oldProps, newProps, el)
+
+    patchChildren(n1, n2, container)
+  }
+
+  const patchProps = (oldProps, newProps, el) => {
+    if(oldProps !== newProps) {
+      for(let key in newProps) {
+        const prev = oldProps[key]
+        const next = newProps[key]
+        if(prev !== next) {
+          hostPatchProp(el, key, prev, next)
+        }
+      }
+
+      for(const key in oldProps) {
+        if(!(key in newProps)) {
+          hostPatchProp(el, key, oldProps[key], null)
+        }
+      }
+    }
+  }
+
+  const patchChildren = (n1, n2, container) => {
+    const c1 = n1.children
+    const c2 = n2.children
+
+    // 老得有儿子新的没儿子 新的有儿子老得没儿子 新老都有儿子  新老都是文本
+    const 
   }
 
   const isSameVNodeType = (n1, n2) => {
@@ -127,7 +162,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     hostRemove(n1.el)
   }
 
-  const patch = (n1, n2, container, anchor = null) => {
+  const patch = (n1, n2, container, anchor =  null) => {
     // 针对不同类型 做初始化操作
     const { shapeFlag, type } = n2
     if(n1 && isSameVNodeType(n1, n2)) {

@@ -15,9 +15,10 @@
 
      let App = { // getCurrentInstance => instance
       setup(props, context) { // instance里边包含的内容 会提取一些传递给 context
-        let state = reactive({name: 'berlin'})
+        let state = reactive({name: 'berlin', color: 'red'})
         setTimeout(() => {
           state.name = 'mengtian'
+          state.color = 'blue'
         }, 1000)
          let fn = () => {
           state.name = 'xiaohong'
