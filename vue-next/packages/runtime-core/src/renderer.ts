@@ -124,7 +124,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
 
     patchProps(oldProps, newProps, el)
 
-    patchChildren(n1, n2, container)
+    patchChildren(n1, n2, el)
   }
 
   const patchProps = (oldProps, newProps, el) => {
@@ -157,19 +157,52 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     let e1  = c1.length -1
     let e2 = c2.length - 1
 
+    console.log('>>>e1>>', c1)
+    console.log('>>>e2>>', c2)
+
     // 尽可能减少比对的区域
 
     // sync from start 从头开始一个个逼 遇到不同就停止
     while(i <= e1 && i <= e2) {
        const n1 = c1[i]
-       let n2 = c2[i]
-       if(isSameVNodeType(n1, n2)) {
+       const n2 = c2[i]
+       if(!isSameVNodeType(n1, n2)) {
          patch(n1, n2, el)
        } else {
          break
        }
        i++
     }
+    // sync from end
+    while(i <= e1 && i <= e2) {
+      const n1 = c1[e1]
+      const n2 = c2[e2]
+      if(!isSameVNodeType(n1, n2)) {
+        patch(n1, n2, el)
+      } else {
+        break
+      }
+      e1--;
+      e2--;
+    }
+
+    // common  sequence+ mount 同序列加挂载
+    // 比较后 有一方已经完全比对完成了
+    // 怎么确定要挂载呢
+    if(i > e1) { // 老的少 新的多
+      if( i <= e2) { // 表示有新增的部分
+        const nextPos = e2  + 1
+        // 想知道是向前插入还是向后插入
+        const anchor = nextPos < c2.length ? c2[nextPos].el : null
+        while(i <= e2) {
+          patch(null, c2[i], el, anchor) // 只是向后追加
+          i++
+        }
+      }
+    } else { // 老的多新的少
+
+    }
+
 
     console.log(i, e1, e2)
 
