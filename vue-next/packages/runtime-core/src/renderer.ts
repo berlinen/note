@@ -34,7 +34,11 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
         instance.isMounted = true
       } else {
         // 更新逻辑
-        console.log('update')
+        const prevTree = instance.subTree
+        let proxyToUse = instance.proxy
+        let nextTree = instance.render.call(proxyToUse, proxyToUse)
+
+        patch(prevTree, nextTree, container)
       }
     }, {
       scheduler: queueJob
@@ -103,6 +107,8 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
   const processElement = (n1, n2, container) => {
      if(n1 === null) {
       mountElemet(n2, container)
+     } else {
+       
      }
   }
 
