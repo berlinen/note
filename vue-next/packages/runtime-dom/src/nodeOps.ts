@@ -1,7 +1,7 @@
 export const nodeOps = {
   // crateElement 不同平台创建方式不同
 
-  createElement: tagName => document.createElement(tagName), // 增加
+  createElement : tagName => document.createElement(tagName), // 增加
 
   remove: child => { // 删除
     const parent = child.parentNode
@@ -19,6 +19,8 @@ export const nodeOps = {
   // 文本操作
   createText: text => document.createTextNode(text),
 
-  setText: (node, text) => node.nodeValue = text
+  setText: (node, text) => node.nodeValue = text,
+
+  nextSibling: (node) => node.nextSibling
 
 }

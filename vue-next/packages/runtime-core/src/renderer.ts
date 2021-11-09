@@ -17,6 +17,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     createComment: hostCreateComment,
     setText: hostSetText,
     setElementText: hostSetElementText,
+    nextSibling: hostNextSibling
   } = renderOptions
   const setupRenderEffect = (instance, container) => {
     // 需要创建一个 effect，在effect中调用render方法。
@@ -86,7 +87,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     }
   }
 
-  const mountElemet = (vnode, container) => {
+  const mountElemet = (vnode, container, anchor = null) => {
      // 递归渲染
      const { props, shapeFlag, type, children } = vnode
      let el = (vnode.el = hostCreateElement(type))
@@ -100,21 +101,41 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
      } else if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
       mountChildren(children, el)
      }
-     hostInsert(el, container)
+     hostInsert(el, container, anchor)
   }
   // -----------------------------------------------------元素
 
-  const processElement = (n1, n2, container) => {
+  const processElement = (n1, n2, container, anchor) => {
      if(n1 === null) {
-      mountElemet(n2, container)
+      mountElemet(n2, container, anchor)
      } else {
-       
+       patchElement(n1, n2, container)
      }
   }
 
-  const patch = (n1, n2, container) => {
+  // 比对元素
+  const patchElement = (n1, n2, container) => {
+
+  }
+
+  const isSameVNodeType = (n1, n2) => {
+    return n1.type === n2.type && n2.key === n1.key
+  }
+
+  // 删除元素
+  const unMount = (n1) => {
+    hostRemove(n1.el)
+  }
+
+  const patch = (n1, n2, container, anchor = null) => {
     // 针对不同类型 做初始化操作
     const { shapeFlag, type } = n2
+    if(n1 && isSameVNodeType(n1, n2)) {
+      // 把以前的删除 换成n2
+      anchor = hostNextSibling(n1.el)
+      unMount(n1)
+      n1 = null // 重新渲染n2
+    }
     switch(type) {
       case TEXT:
         processText(n1, n2, container)
@@ -122,7 +143,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
       default:
         if(shapeFlag & ShapeFlags.ELEMENT) {
           // element
-          processElement(n1, n2, container)
+          processElement(n1, n2, container, anchor)
         } else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
           // component
           processComponent(n1, n2, container)
