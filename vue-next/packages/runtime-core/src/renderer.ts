@@ -214,9 +214,19 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
         keyToNewIndexMap.set(childVnode.key, i)
       }
 
+      // 去老的里面查找 看有没有复用的
+      for(let i= 0; i <= e1; i++) {
+        const oldVnode = c1[i]
+        let newIndex = keyToNewIndexMap.get(oldVnode.key)
+        if(newIndex === undefined) { // 老的里的不再新的中
+          unMount(oldVnode)
+        } else {
+          patch(oldVnode, c2[newIndex], el)
+        }
+      }
+
       console.log(keyToNewIndexMap)
     }
-
     console.log(i, e1, e2)
 
 
