@@ -232,13 +232,14 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
       }
 
       for(let i = toBePatched - 1; i >= 0; i--) {
-        let currentIndex = i + s2
-        let child = c2[currentIndex]
+        let currentIndex = i + s2 // 找到h的索引
+        let child = c2[currentIndex] // 找到h对应的节点
         let anchor = currentIndex + 1 < c2.length ? c2[currentIndex].el : null // 第一次插入h后会有一个虚拟节点 同时插入后 虚拟节点会拥有真实节点
 
         if(newIndexToOldIndexMap[i] === 0) { // 如果自己是0说明没有被patch过
           patch(null, child, el, anchor)
         } else {
+          // 这种操作需要将节点全部移动一遍， 希望可以尽可能的少移动
           hostInsert(child.el, el, anchor) // 操作当前的d 以d下一个作为参照物插入
         }
       }
