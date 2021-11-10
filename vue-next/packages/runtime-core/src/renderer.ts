@@ -163,7 +163,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     while(i <= e1 && i <= e2) {
        const n1 = c1[i]
        const n2 = c2[i]
-       if(!isSameVNodeType(n1, n2)) {
+       if(isSameVNodeType(n1, n2)) {
          patch(n1, n2, el)
        } else {
          break
@@ -174,7 +174,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
     while(i <= e1 && i <= e2) {
       const n1 = c1[e1]
       const n2 = c2[e2]
-      if(!isSameVNodeType(n1, n2)) {
+      if(isSameVNodeType(n1, n2)) {
         patch(n1, n2, el)
       } else {
         break
@@ -207,25 +207,47 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
       let s2 = i
 
       // v3用新的做映射表 v2 用老的
-
       const keyToNewIndexMap = new Map()
+
       for(let i = s2; i <= e2; i++) {
         const childVnode = c2[i] // child vnode
         keyToNewIndexMap.set(childVnode.key, i)
       }
 
+      const toBePatched = e2 - s2 + 1
+      const newIndexToOldIndexMap = new Array(toBePatched).fill(0)
+
       // 去老的里面查找 看有没有复用的
-      for(let i= 0; i <= e1; i++) {
+      for(let i = s1; i <= e1; i++) {
         const oldVnode = c1[i]
         let newIndex = keyToNewIndexMap.get(oldVnode.key)
         if(newIndex === undefined) { // 老的里的不再新的中
           unMount(oldVnode)
-        } else {
+        } else { // 新老的对比，比较完毕后为止有差异
+          // 新的和旧的关系 索引的关系
+          newIndexToOldIndexMap[newIndex - s2] = i + 1
+
           patch(oldVnode, c2[newIndex], el)
         }
       }
 
-      console.log(keyToNewIndexMap)
+      for(let i = toBePatched - 1; i >= 0; i--) {
+        let currentIndex = i + s2
+        let child = c2[currentIndex]
+        let anchor = currentIndex + 1 < c2.length ? c2[currentIndex].el : null // 第一次插入h后会有一个虚拟节点 同时插入后 虚拟节点会拥有真实节点
+
+        if(newIndexToOldIndexMap[i] === 0) { // 如果自己是0说明没有被patch过
+          patch(null, child, el, anchor)
+        } else {
+          hostInsert(child.el, el, anchor) // 操作当前的d 以d下一个作为参照物插入
+        }
+      }
+
+
+
+      console.log(newIndexToOldIndexMap)
+
+      // 最后的是移动节点， 并且将新增的节点插入
     }
     console.log(i, e1, e2)
 
