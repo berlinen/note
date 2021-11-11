@@ -55,7 +55,7 @@ function getSequence(arr) {
   let last = result[resLen - 1] // 取最后一个
   // 根据前驱节点一个一个向前查找
   while(resLen-- > 0) {
-    result[start] = last //
+    result[resLen] = last 
     last = p[last] // 最后一项等于当前最后一项
   }
 
