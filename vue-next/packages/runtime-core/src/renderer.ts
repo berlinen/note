@@ -302,7 +302,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
   }
 
   // 删除元素
-  const unMount = (n1) => {
+  const unMount = (n1) => { 
     hostRemove(n1.el)
   }
 
