@@ -4,6 +4,7 @@ import { createAppApi } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component'
 import { normalizeVNode, TEXT } from './vnode'
 import { queueJob } from './scheduler'
+import { getSequence } from './sequeence'
 
 // 目的是创建一个渲染器
 // 组件生成虚拟dom 虚拟dom生成真实dom渲染到页面上
@@ -230,6 +231,11 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
           patch(oldVnode, c2[newIndex], el)
         }
       }
+      // [5,3,4,0] => [1,2]
+      let increasingNewIndexSquence = getSequence(newIndexToOldIndexMap)
+      // toBePatched[3,2,1,0]
+      // 取出最后一位
+      let j = increasingNewIndexSquence.length - 1
 
       for(let i = toBePatched - 1; i >= 0; i--) {
         let currentIndex = i + s2 // 找到h的索引
@@ -240,11 +246,14 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
           patch(null, child, el, anchor)
         } else {
           // 这种操作需要将节点全部移动一遍， 希望可以尽可能的少移动
-          hostInsert(child.el, el, anchor) // 操作当前的d 以d下一个作为参照物插入
+          if(i !== increasingNewIndexSquence[j]) {
+            hostInsert(child.el, el, anchor) // 操作当前的d 以d下一个作为参照物插入
+          } else {
+            j-- // 跳过不需要移动的元素 为了减少移动操作 需要这个最长递增子序列
+          }
+
         }
       }
-
-
 
       console.log(newIndexToOldIndexMap)
 
@@ -302,7 +311,7 @@ export const createRenderer = (renderOptions) => { // 告诉core怎么取渲染 
   }
 
   // 删除元素
-  const unMount = (n1) => { 
+  const unMount = (n1) => {
     hostRemove(n1.el)
   }
 
