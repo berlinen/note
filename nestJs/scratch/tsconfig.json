@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "experimentalDecorators": true, // 实现装饰器
+    "emitDecoratorMetadata": true // 限制装饰器元数据
+  }
+}  
