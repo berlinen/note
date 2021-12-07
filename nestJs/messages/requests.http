@@ -9,7 +9,7 @@ POST http://localhost:3000/messages
 content-type: application/json
 
 {
-  "conteng": "hi there"
+  "content": "hi there"
 }
 
 ### get a particular message
