@@ -1,5 +1,6 @@
-import { read } from "fs";
-import { readFile, writeFile } from "fs/promises";
+import { promises } from "fs";
+
+const { readFile, writeFile } = promises
 
 export class MessageRepository {
   async findOne(id: string) {

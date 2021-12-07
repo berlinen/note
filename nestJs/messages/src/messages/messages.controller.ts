@@ -19,7 +19,7 @@ export class MessagesController {
 
   @Post()
   createMessage(@Body() body: CreateMessageDto) {
-    return this.mesagesService.createMessage(body.content);
+    return this.mesagesService.createMessage(body.content); 
   }
 
   @Get('/:id')
