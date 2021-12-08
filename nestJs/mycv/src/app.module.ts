@@ -11,7 +11,7 @@ import { Report } from './reports/report.entity'
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'db.sqlite',
+      database: 'db.sqlite', // 数据库名称
       entities: [User, Report], // 实体
       synchronize: true
     }),
