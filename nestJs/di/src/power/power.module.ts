@@ -3,6 +3,6 @@ import { PowerService } from './power.service';
 
 @Module({
   exports: [PowerService],
-  providers: [PowerService]
+  providers: [PowerService],
 })
 export class PowerModule {}
