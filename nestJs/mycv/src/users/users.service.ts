@@ -23,6 +23,7 @@ export class UsersService {
   }
 
   async update(id: number, attrs: Partial<User>) {
+    // 寻找实体
     const user = await this.findOne(id)
     if(!user) {
       throw new Error('not found this user')
@@ -32,7 +33,7 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    // delete 将不会触发实体的hooks
+    // 直接delete 将不会触发实体的hooks
     const user = await this.findOne(id)
 
     if(!user) {
