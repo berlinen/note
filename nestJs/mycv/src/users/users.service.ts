@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async update(id: number, attrs: Partial<User>) {
-    const user = await this.find(id)
+    const user = await this.findOne(id)
     if(!user) {
       throw new Error('not found this user')
     }
@@ -31,5 +31,14 @@ export class UsersService {
     return this.repo.save(user)
   }
 
-  remove() {}
+  async remove(id: number) {
+    // delete 将不会触发实体的hooks
+    const user = await this.findOne(id)
+
+    if(!user) {
+     throw new Error('not found this user')
+    }
+
+    return this.repo.delete(user)
+  }
 }
