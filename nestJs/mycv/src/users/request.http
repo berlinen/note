@@ -15,3 +15,11 @@ GET http://localhost:3000/auth?email=1292393108@qq.com
 
 ### delete uese with given id
 DELETE http://localhost:3000/auth/3
+
+### update a user
+PATCH http://localhost:3000/auth/2
+content-type: application/json
+
+{
+  "email": "aaaaaa@aa.com"
+}
