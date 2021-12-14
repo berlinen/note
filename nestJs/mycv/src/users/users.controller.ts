@@ -14,24 +14,28 @@ export class UsersController {
     private aythService: AuthService
   ) {}
 
-  @Get('/colors/:color')
-  setColor(@Param('color') color: string, @Session() session: any) {
-    session.color = color
-  }
+  // @Get('/colors/:color')
+  // setColor(@Param('color') color: string, @Session() session: any) {
+  //   session.color = color
+  // }
 
-  @Get('/colors')
-  getColor(@Session() session: any) {
-    return session.color
-  }
+  // @Get('/colors')
+  // getColor(@Session() session: any) {
+  //   return session.color
+  // }
 
   @Post('/signup')
-  createUset(@Body() body: CreateUserDto) {
-    return this.aythService.signup(body.email, body.password)
+  async createUset(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.aythService.signup(body.email, body.password)
+    session.userId = user.id
+    return user
   }
 
   @Post('/signin')
-  signin(@Body() body: CreateUserDto) {
-    return this.aythService.signin(body.email, body.password)
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.aythService.signin(body.email, body.password)
+    session.userId = user.id
+    return user
   }
 
   // @UseInterceptors(new SerializeInterceptor(UserDto))
