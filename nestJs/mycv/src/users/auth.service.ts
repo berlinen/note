@@ -24,8 +24,9 @@ export class AuthService {
     // join rhe hasheed result and the sale together
     const result = salt + '.' + hash.toString('hex')
     // create a new user and save it
-    
+    const user = await this.userService.create(email, result)
     // return the user
+    return user
   }
 
   signin() {
