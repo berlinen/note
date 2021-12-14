@@ -19,6 +19,11 @@ export class UsersController {
     return this.aythService.signup(body.email, body.password)
   }
 
+  @Post('/signin')
+  signin(@Body() body: CreateUserDto) {
+    return this.aythService.signin(body.email, body.password)
+  }
+
   // @UseInterceptors(new SerializeInterceptor(UserDto))
   // @Serialize(UserDto)
   @Get('/:id')
