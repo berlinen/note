@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -14,10 +15,16 @@ export class UsersController {
     private aythService: AuthService
   ) {}
 
+//  @Get('whoami')
+//  whoAmI(@Session() session: any) {
+//    return this.usersService.findOne(session.userId)
+//  }
+
  @Get('whoami')
- whoAmI(@Session() session: any) {
-   return this.usersService.findOne(session.userId)
+ whoAmI(@CurrentUser() user: any) {
+   return user
  }
+
 
  @Post('signout')
  signOut(@Session() session: any) {
