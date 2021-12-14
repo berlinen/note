@@ -14,15 +14,10 @@ export class UsersController {
     private aythService: AuthService
   ) {}
 
-  // @Get('/colors/:color')
-  // setColor(@Param('color') color: string, @Session() session: any) {
-  //   session.color = color
-  // }
-
-  // @Get('/colors')
-  // getColor(@Session() session: any) {
-  //   return session.color
-  // }
+ @Get('whoami')
+ whoAmI(@Session() session: any) {
+   return this.usersService.findOne(session.userId)
+ }
 
   @Post('/signup')
   async createUset(@Body() body: CreateUserDto, @Session() session: any) {
