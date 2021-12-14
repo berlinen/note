@@ -3,7 +3,7 @@ Post http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-  "email": "129239318@qq.com",
+  "email": "129239319@qq.com",
   "password": "123456"
 }
 
