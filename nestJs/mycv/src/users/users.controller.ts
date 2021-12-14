@@ -7,6 +7,7 @@ import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 
+
 @Controller('auth')
 @Serialize(UserDto)
 export class UsersController {
