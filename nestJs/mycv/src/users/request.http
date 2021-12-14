@@ -11,7 +11,7 @@ content-type: application/json
 GET http://localhost:3000/auth/1
 
 ### find all users with a given emial
-GET http://localhost:3000/auth?email=12923a9@qq.com
+GET http://localhost:3000/auth?email=129239@qq.com
 
 ### delete uese with given id
 DELETE http://localhost:3000/auth/3

@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators'
 import { plainToClass } from 'class-transformer'
 
 export function Serialize(dto: any) {
-  return UseInterceptors(new SerializerInterceptor(dto))
+  return UseInterceptors(new Se rializerInterceptor(dto))
 }
 
 export class SerializerInterceptor implements NestInterceptor {
