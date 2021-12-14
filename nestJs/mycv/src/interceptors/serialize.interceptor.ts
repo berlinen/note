@@ -3,8 +3,12 @@ import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { plainToClass } from 'class-transformer'
 
-export function Serialize(dto: any) {
-  return UseInterceptors(new Se rializerInterceptor(dto))
+interface ClassConstructor {
+  new (...args: any[]): {}
+}
+
+export function Serialize(dto: ClassConstructor) {
+  return UseInterceptors(new SerializerInterceptor(dto))
 }
 
 export class SerializerInterceptor implements NestInterceptor {
