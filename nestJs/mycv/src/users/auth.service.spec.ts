@@ -48,6 +48,39 @@ describe('AuthService', () => {
 
     }
   })
+
+  it('throws if signin is called with an unused email', async () => {
+    try {
+      await service.signin('aas@test.com', 'ssss')
+    } catch (err) {
+      // done()
+    }
+  })
+
+  it('throws if an invalid password is provided', async() => {
+    fakeUsersService.find = () =>
+      Promise.resolve([{ id: 1, email: 'abc@test.com', password: '123456'} as User])
+
+      try {
+        await service.signin('aas@test.com', 'ssss')
+      } catch(err) {
+
+      }
+  })
+
+  it('returns a user if coorect password is provided', async() => {
+
+    fakeUsersService.find = () =>
+      Promise.resolve([{ id: 1, email: 'abc@test.com', password: '21049e29c77215ce.910606aea9b0a18ecd17c2850ea97eac92cff1bf2df463e9124faa6b60fe42f8'} as User])
+
+      try {
+        const user = await service.signin('aas@test.com', 'ssss')
+        console.log('user', user)
+      } catch(err) {
+
+      }
+
+  })
 })
 
 
