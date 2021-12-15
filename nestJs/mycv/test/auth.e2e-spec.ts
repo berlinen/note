@@ -13,20 +13,20 @@ describe('Authentication system', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    setup(app)
+    // setup(app)
     await app.init();
   });
 
   it('handles a signup request', () => {
-    const email = 'asas@ass.com'
+    const email = 'asasssss@ass.com'
     return request(app.getHttpServer())
       .post('/auth/signup')
       .send({ email, password: 'aaaa' })
       .expect(201)
       .then(res => {
-        const { id, _email } = res.body
+        const { id, email } = res.body
         expect(id).toBeDefined()
-        expect(_email).toEqual(email)
+        expect( email).toEqual(email)
       })
   });
 });
