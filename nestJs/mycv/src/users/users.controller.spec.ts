@@ -44,4 +44,10 @@ describe('UsersController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('findAllUsers returns a list of users with the given email', async() => {
+    const users = await controller.findAllUsers('aa@test.com')
+    expect(users.length).toEqual(1)
+    expect(users[0].email).toEqual('aa@test.com')
+  })
 });
