@@ -67,7 +67,7 @@ describe('UsersController', () => {
     const session = {userId: -10}
     const user = await controller.signin({
       email: 'aaa@test.com',
-      password: 'sss'
+      password: 'sss' 
     }, session)
 
     expect(user.id).toEqual(1)
