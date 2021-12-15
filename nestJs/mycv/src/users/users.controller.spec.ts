@@ -12,10 +12,10 @@ describe('UsersController', () => {
   beforeEach(async () => {
     fakeUsersService = {
       findOne(id: number) {
-        return Promise.resolve({ id: 99,  email: 'aa@test.com', password: '123'} as User)
+        return Promise.resolve({ id,  email: 'aa@test.com', password: '123'} as User)
       },
       find(email: string) {
-        return Promise.resolve([{ id: 99,  email: 'aa@test.com', password: '123'} as User])
+        return Promise.resolve([{ id: 1,  email: 'aa@test.com', password: '123'} as User])
       },
       // remove() {},
       // update() {}
@@ -49,5 +49,15 @@ describe('UsersController', () => {
     const users = await controller.findAllUsers('aa@test.com')
     expect(users.length).toEqual(1)
     expect(users[0].email).toEqual('aa@test.com')
+  })
+
+  it('finduse returns a single user with the gived id', async() => {
+    const user = await controller.findUser('1')
+    expect(user).toBeDefined()
+  })
+
+  it('finduser throw an err if user with given iid is not found', async() => {
+    fakeUsersService.findOne = () => null
+    await controller.findUser('1')
   })
 });
