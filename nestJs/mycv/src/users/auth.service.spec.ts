@@ -48,32 +48,18 @@ describe('AuthService', () => {
   })
 
   it('throws an error if user sign up with email that is in use', async () => {
-    fakeUsersService.find = () =>
-      Promise.resolve([{ id: 1, email: 'abc@test.com', password: '123456'} as User])
-    try {
-      await service.signup('129239@qq.com	', '123456')
-    } catch(err) {
-
-    }
+    await service.signup('129239@qq.com	', '123456')
+    await service.signup('1292391@qq.com	', '123456')
   })
 
   it('throws if signin is called with an unused email', async () => {
-    try {
-      await service.signin('aas@test.com', 'ssss')
-    } catch (err) {
-      // done()
-    }
+    await service.signup('aas@test.com', 'ssss')
+    await service.signin('aasaaaasasassa@test.com', 'ssss')
   })
 
   it('throws if an invalid password is provided', async() => {
-    fakeUsersService.find = () =>
-      Promise.resolve([{ id: 1, email: 'abc@test.com', password: '123456'} as User])
-
-      try {
-        await service.signin('aas@test.com', 'ssss')
-      } catch(err) {
-
-      }
+     await service.signup('aassss@test.com', 'ssss')
+     await service.signin('aassss@test.com', 'ssss')
   })
 
   it('returns a user if coorect password is provided', async() => {
