@@ -5,6 +5,7 @@ export class ReportDto {
   @Expose()
   id: number
 
+
   @Expose()
   make: string
 
@@ -25,6 +26,9 @@ export class ReportDto {
 
   @Expose()
   lat: number
+
+  @Expose()
+  approved: boolean
 
   @Transform(({ obj }) => obj.user.id)
   @Expose()
