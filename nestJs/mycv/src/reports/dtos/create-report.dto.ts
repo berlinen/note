@@ -1,4 +1,4 @@
-import { IsEmail, IsString, IsNumber, Min, Max, IsLatLong, IsLongitude } from 'class-validator'
+import { IsEmail, IsString, IsNumber, Min, Max, IsLatitude, IsLongitude } from 'class-validator'
 
 export class CreateReportDto {
   @IsString()
@@ -25,6 +25,6 @@ export class CreateReportDto {
   @Max(1000000)
   price: number
 
-  @IsLatLong()
+  @IsLatitude()
   lat: number
 }
