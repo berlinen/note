@@ -18,7 +18,20 @@ describe('Authentication system', () => {
   });
 
   it('handles a signup request', () => {
-    const email = 'asassssssss@ass.com'
+    const email = '2@ass.com'
+    return request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ email, password: 'aaaa' })
+      .expect(201)
+      .then(res => {
+        const { id, email } = res.body
+        expect(id).toBeDefined()
+        expect( email).toEqual(email)
+      })
+  });
+
+  it('handles a signup request', () => {
+    const email = '3@ass.com'
     return request(app.getHttpServer())
       .post('/auth/signup')
       .send({ email, password: 'aaaa' })
