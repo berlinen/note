@@ -12,7 +12,7 @@ export class ReportsService {
 
   createEstimate({ make, model, lng, lat, year, mileage }) {
     return this.repo.createQueryBuilder()
-      .select('*')
+      .select('AVG(price)', 'price')
       .where('make = :make', { make })
       .andWhere('model = :model', { model })
       .andWhere('lng - :lng BETWEEN -5 AND 5', { lng })
@@ -21,6 +21,7 @@ export class ReportsService {
       .orderBy('ABS(mileage - :mileage)', 'DESC')
       // @ts-ignore
       .setParameter({ mileage })
+      .limit(3)
       .getRawMany()
   }
 
