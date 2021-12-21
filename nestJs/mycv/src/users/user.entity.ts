@@ -14,11 +14,12 @@ export class User {
   @Exclude()
   password: string
 
-  @Column({ default: true })
-  admin: boolean
+  // @Column({ default: true })
+  // admin: boolean;
 
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[]
+
 
   @AfterInsert()
   logInsert() {
