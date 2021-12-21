@@ -20,3 +20,6 @@ Content-Type: application/json
 {
   "approved": true
 }
+
+### get an estimate for an existing vehicle
+GET http://localhost:3000/reports?make=toyota&

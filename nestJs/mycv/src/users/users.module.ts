@@ -13,19 +13,19 @@ import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
     TypeOrmModule.forFeature([User])
   ],
   controllers: [UsersController],
-  providers: [UsersService, AuthService],
-  // providers: [
-  //   UsersService,
-  //   AuthService,
-  //   // 中间件代替
-  //   // {
-  //   //   provide: APP_INTERCEPTOR,
-  //   //   useClass: CurrentUserInterCeptor
-  //   // }
-  // ]
+  // providers: [UsersService, AuthService],
+  providers: [
+    UsersService,
+    AuthService,
+    // 中间件代替
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CurrentUserInterCeptor
+    }
+  ]
 })
 export class UsersModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CurrentUserMiddleware).forRoutes('*')
-  }
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(CurrentUserMiddleware).forRoutes('*')
+  // }
 }
