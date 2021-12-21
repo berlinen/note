@@ -22,4 +22,4 @@ Content-Type: application/json
 }
 
 ### get an estimate for an existing vehicle
-GET http://localhost:3000/reports?make=toyota&
+GET http://localhost:3000/reports?make=ford&model=cololla&year=1980&mileage=10000&lng=0&lat=0
